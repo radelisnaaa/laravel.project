@@ -17,11 +17,10 @@ class Event extends Model
         'name',
         'image',
         'title',
+        'speaker',
         'description',
         'date',
-        'location',
         'price',
-        'organizer-id',
         'created_at',
         'updated_at',
         
@@ -30,4 +29,3 @@ class Event extends Model
        
     ];
 }
-

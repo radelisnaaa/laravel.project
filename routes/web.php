@@ -9,6 +9,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::resource('/events', \App\Http\Controllers\EventController::class);
+Route::resource('/users', \App\Http\Controllers\UserController::class);
 
 Route::get('/dashboard', function () {
     return view('dashboard');

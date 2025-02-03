@@ -23,17 +23,19 @@
 
     <div class="card shadow-lg p-4">
         <div class="card-body">
+        <img src="{{ asset('/storage/event/'.$event->image) }}" class="rounded" style="width: 100%">
             <h5 class="card-title fw-bold">{{ $event->name }}</h5>
             <p class="card-text"><strong>Deskripsi:</strong> {{ $event->description }}</p>
+            <p class="card-text"><strong>Pembicara:</strong> {{ $event->speaker }}</p>
             <p class="card-text"><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
             <div class="mb-3">
-                <strong>Gambar Acara:</strong><br>
+                <!-- <strong>Gambar Acara:</strong><br>
                 @if($event->image)
                     <img src="{{ asset('storage/' . $event->image) }}" alt="Gambar Acara" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
                 @else
                     <p>Tidak ada gambar tersedia.</p>
                 @endif
-            </div>
+            </div> -->
 
             <div class="d-grid gap-2">
                 <a href="{{ route('events.index') }}" class="btn btn-secondary">KEMBALI</a>

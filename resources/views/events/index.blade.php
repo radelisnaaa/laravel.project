@@ -52,6 +52,7 @@
                 <th>No</th>
                 <th>Gambar</th>
                 <th>Nama Acara</th>
+                <th>Pembicara</th>
                 <th>Deskripsi</th>
                 <th>Tanggal</th>
                 <th>Aksi</th>
@@ -65,6 +66,7 @@
                         <img src="{{ Storage::url('images/' . $event->image) }}" alt="Gambar Acara" width="100">
                     </td>
                     <td>{{ $event->name }}</td>
+                    <td>{{ $event->speaker }}</td>
                     <td>{{ $event->description }}</td>
                     <td>{{ $event->date }}</td>
                     <td>

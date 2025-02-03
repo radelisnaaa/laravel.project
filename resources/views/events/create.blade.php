@@ -53,6 +53,17 @@
                         </div>
                     @enderror
                 </div>
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Pembicara</label>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama Acara" required>
+                    @error('name')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                    @enderror
+                </div>
+
+
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Deskripsi Acara</label>
