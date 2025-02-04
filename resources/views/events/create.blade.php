@@ -55,16 +55,13 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-bold">Pembicara</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama Acara" required>
-                    @error('name')
+                    <input type="text" class="form-control @error('speaker') is-invalid @enderror" name="speaker" value="{{ old('speaker') }}" placeholder="Masukkan Pembicara" required>
+                    @error('speaker')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
-
-
-
                 <div class="mb-3">
                     <label class="form-label fw-bold">Deskripsi Acara</label>
                     <textarea class="form-control @error('description') is-invalid @enderror" name="description" placeholder="Masukkan Deskripsi Acara" rows="3" required>{{ old('description') }}</textarea>

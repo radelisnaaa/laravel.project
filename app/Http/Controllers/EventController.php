@@ -48,8 +48,10 @@ class EventController extends Controller
        $request->validate([
           'name' => 'required|string|max:255',
           'description' => 'required|string',
+          'zoom_link' => 'nullable|url',
           'date' => 'required|date',
           'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
        ]);
        
 
@@ -77,6 +79,7 @@ class EventController extends Controller
         $event = Event::create([
             'name' => $request->name,
             'description' => $request->description,
+            'zoom_link' => $request->zoom_link,
             'date' => $request->date,
             'image' => $image->hashName(),
             'user_id' => Auth::id(),
@@ -123,12 +126,14 @@ class EventController extends Controller
         //upload the image
         $request->validate([
             'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'zoom_link' => 'nullable|url',
         ]);
 // Check if a new image is uploaded
 if ($request->hasFile('image')) {
     // Validate and upload the image
     $request->validate([
         'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+
     ]);
 
     $image = $request->file('image');
@@ -140,6 +145,7 @@ if ($request->hasFile('image')) {
     // Update the event with the new image
     $event->update([
         'image' => $image->hashName(),
+        'zoom_link' => $request->zoom_link,
     ]);
 }
 

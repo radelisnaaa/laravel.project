@@ -15,17 +15,13 @@ class Event extends Model
         'user_id',
         'event_id',
         'name',
-        'image',
-        'title',
         'speaker',
+        'image',  
         'description',
+        'zoom_link',
         'date',
         'price',
         'created_at',
         'updated_at',
-        
-        
-
-       
     ];
 }

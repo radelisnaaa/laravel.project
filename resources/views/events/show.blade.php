@@ -25,8 +25,14 @@
         <div class="card-body">
         <img src="{{ asset('/storage/event/'.$event->image) }}" class="rounded" style="width: 100%">
             <h5 class="card-title fw-bold">{{ $event->name }}</h5>
-            <p class="card-text"><strong>Deskripsi:</strong> {{ $event->description }}</p>
+            <p class="card-text"><strong>Acara:</strong> {{ $event->name }}</p>
             <p class="card-text"><strong>Pembicara:</strong> {{ $event->speaker }}</p>
+            <p class="card-text"><strong>Deskripsi:</strong> {{ $event->description }}</p>
+            @if (!empty($event->zoom_link))
+                <a href="{{ $event->zoom_link }}" target="_blank" class="btn btn-primary">Join Zoom Meeting</a>
+            @else
+                <a href="#" class="btn btn-secondary disabled" aria-disabled="true">Join Zoom (Belum Tersedia)</a>
+            @endif
             <p class="card-text"><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}</p>
             <div class="mb-3">
                 <!-- <strong>Gambar Acara:</strong><br>
