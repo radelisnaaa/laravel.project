@@ -45,57 +45,22 @@
         </div>
     @endif
 
-    <div class="card shadow-lg">
-        <table class="table table-bordered table-hover text-center align-middle">
-            <thead class="table-dark">
-            <tr>
-                <th>Nama</th>
-                <th>Email</th>
-                <th>No.Telepon</th>
-                <th>Role</th>
-                <th>Status</th>
-                <th>Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
-            @forelse ($members as $member)
-                <tr>
-                    <td>{{ $member->name }}</td>
-                    <td>{{ $member->email }}</td>
-                    <td>{{ $member->phone }}</td>
-                    <td>{{ $member->role }}</td>
-                    <td>{{ $member->status }}</td>
-                    <td>
-                        <a href="{{ route('members.show', $member->id) }}" class="btn btn-info btn-sm">Detail</a>
-                        @if (Auth::check() && Auth::id() === $member->user_id)
-                            <a href="{{ route('members.edit', $member->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('members.destroy', $member->id) }}" method="POST" class="d-inline">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Apakah Anda yakin ingin menghapus member ini?')">Hapus</button>
-                            </form>
-                        @endif
-                    </td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="6" class="text-center">Tidak ada member.</td>
-                </tr>
-            @endforelse
-            </tbody>
-        </table>
-    </div>
-
-    @if (Auth::check())
-        <div class="d-grid gap-2 mt-3">
-            <a href="{{ route('members.create') }}" class="btn btn-primary">Tambah Member Baru</a>
+    @if($event->users->contains(auth()->user()))
+            <form action="{{ route('event.unregister', ['userId' => auth()->id(), 'eventId' => $event->id]) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-danger">Keluar dari Event</button>
+            </form>
+        @else
+            <form action="{{ route('event.register', ['userId' => auth()->id(), 'eventId' => $event->id]) }}" method="POST">
+                @csrf
+                <button type="submit" class="btn btn-primary">Daftar Event</button>
+            </form>
+        @endif
         </div>
-    @else
-        <p class="text-center mt-3">Silakan <a href="{{ route('login') }}">login</a> untuk menambah member.</p>
-    @endif
+    </div>
 </div>
+@endsection
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-</html>
+</html> 

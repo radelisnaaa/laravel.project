@@ -7,7 +7,11 @@ use App\Http\Controllers\MemberController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'login'])->name('user.login');
-Route::post('/members/{memberId}/events/{eventId}', [MemberController::class, 'joinEvent'])->name('members.joinEvent');
+Route::post('/eventusers/{memberId}/events/{eventId}', [MemberController::class, 'joinEvent'])->name('members.joinEvent');
+Route::post('/event/register/{userId}/{eventId}', [EventUserrController::class, 'registerToEvent'])->name('event.register');
+Route::post('/event/unregister/{userId}/{eventId}', [EventUserrController::class, 'unregisterFromEvent'])->name('event.unregister');
+Route::get('/event/users/{eventId}', [EventUserrController::class, 'eventUsers'])->name('event.users');
+Route::get('/user/events/{userId}', [EventUserrController::class, 'userEvent'])->name('events.index');
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,7 +22,8 @@ Route::delete('/members/{memberId}/events/{eventId}', [MemberController::class, 
 
 Route::resource('/events', EventController::class);
 Route::resource('/users', UserController::class);
-Route::resource('/members', MemberController::class);
+Route::resource('/eventusers', EventUserController::class);
+
 
 Route::get('/dashboard', function () {
     return view('dashboard');
