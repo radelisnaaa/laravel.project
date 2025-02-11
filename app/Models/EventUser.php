@@ -2,14 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\Pivot;
 
-class EventUser extends Model
+class EventUser extends Pivot
 {
-    /** @use HasFactory<\Database\Factories\MemberFactory> */
-    use HasFactory;
-
     protected $table = 'event_users';
 
     protected $fillable = [
@@ -17,26 +13,17 @@ class EventUser extends Model
         'user_id',
     ];
 
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
+    public $timestamps = false; // Jika tabel tidak memiliki created_at & updated_at
 
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-    ];
-
-    //relasi dengan model event
-
+    // Relasi dengan Event
     public function event()
     {
         return $this->belongsTo(Event::class);
     }
 
-    //relasi dengan model user
+    // Relasi dengan User
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-
 }

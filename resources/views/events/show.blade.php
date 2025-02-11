@@ -23,6 +23,13 @@
 
     <div class="card shadow-lg p-4">
         <div class="card-body">
+            <!-- <strong>Gambar Acara:</strong><br>
+                @if($event->image)
+                    <img src="{{ asset('storage/' . $event->image) }}" alt="Gambar Acara" class="img-fluid rounded" style="max-height: 300px; object-fit: cover;">
+                @else
+                    <p>Tidak ada gambar tersedia.</p>
+                @endif
+            </div> -->
         <img src="{{ asset('/storage/event/'.$event->image) }}" class="rounded" style="width: 100%">
             <h5 class="card-title fw-bold">{{ $event->name }}</h5>
             <p class="card-text"><strong>Acara:</strong> {{ $event->name }}</p>

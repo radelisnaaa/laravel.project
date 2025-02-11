@@ -59,7 +59,9 @@ class UserController extends Controller
         $user = User::find($id);
     
         if (!$user) {
-            return view('errors.404'); // Menampilkan halaman error jika user tidak ditemukan
+            return view('user.show', compact('user')); // Menampilkan halaman error jika user tidak ditemukan
+        } else {
+            return redirect()->route('users.show', compact('user'));
         }
     
         return view('users.show', compact('user'));

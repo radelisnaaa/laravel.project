@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');          
             $table->string('speaker');
             $table->text('description');
-            $table->url('zoom_link');
+            $table->string('zoom_link');
             $table->date('date');
             $table->string('image');
             $table->foreignId('user_id')->constrained();

@@ -6,8 +6,8 @@
     <title>Tambah Acara</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        body {
-            background-color: #f8f9fa;
+        /* body {
+            background-color: #1679AB;
         }
         .container {
             max-width: 600px;
@@ -16,13 +16,39 @@
             border-radius: 15px;
         }
         .btn-primary {
-            background-color: #007bff;
+            background-color:rgb(54, 103, 155);
             border-color: #007bff;
         }
         .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
+            background-color:rgb(52, 89, 128);
+            border-color:rgb(201, 211, 222);
+        } */
+
+        body {
+    background-color: #81D4FA; /* Biru langit */
+}
+
+.container {
+    max-width: 600px;
+}
+
+.card {
+    border-radius: 15px;
+    background-color:rgb(169, 217, 243); /* Putih untuk latar card */
+}
+
+.btn-primary {
+    background-color:rgb(103, 196, 240); /* Biru elektrik untuk tombol */
+    border-color: #2962FF;
+}
+
+.btn-primary:hover {
+    background-color:rgb(29, 138, 206); /* Efek hover yang lebih gelap */
+    border-color: #2957E4;
+}
+        h1 {
+         color:rgb(244, 237, 237); /* Mengubah warna teks dalam tag <h1> menjadi merah */
+        }   
     </style>
 </head>
 <body>

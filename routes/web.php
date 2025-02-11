@@ -3,18 +3,26 @@
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\MemberController;
+use App\Http\Controllers\EventUserController;
+use App\Http\Controllers\RegistrationController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'login'])->name('user.login');
+
 Route::post('/eventusers/{memberId}/events/{eventId}', [MemberController::class, 'joinEvent'])->name('members.joinEvent');
-Route::post('/event/register/{userId}/{eventId}', [EventUserrController::class, 'registerToEvent'])->name('event.register');
-Route::post('/event/unregister/{userId}/{eventId}', [EventUserrController::class, 'unregisterFromEvent'])->name('event.unregister');
-Route::get('/event/users/{eventId}', [EventUserrController::class, 'eventUsers'])->name('event.users');
-Route::get('/user/events/{userId}', [EventUserrController::class, 'userEvent'])->name('events.index');
+Route::post('/event/register/{userId}/{eventId}', [EventUserController::class, 'registerToEvent'])->name('event.register');
+Route::post('/event/unregister/{userId}/{eventId}', [EventUserController::class, 'unregisterFromEvent'])->name('event.unregister');
+Route::get('/event/users/{eventId}', [EventUserController::class, 'eventUsers'])->name('event.users');
+Route::get('/user/events/{userId}', [EventUserController::class, 'userEvent'])->name('events.index');
+Route::get('/user/{id}', [UserController::class, 'show']);
+
+
+Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
 Route::get('/', function () {
     return view('welcome');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Menghapus member dari event
@@ -22,7 +30,8 @@ Route::delete('/members/{memberId}/events/{eventId}', [MemberController::class, 
 
 Route::resource('/events', EventController::class);
 Route::resource('/users', UserController::class);
-Route::resource('/eventusers', EventUserController::class);
+Route::resource('eventusers', EventUserController::class);
+Route::resource('registrations', RegistrationController::class);
 
 
 Route::get('/dashboard', function () {
@@ -32,10 +41,10 @@ Route::get('/dashboard', function () {
 Route::middleware(['auth'])->group(function () {
     //Route::resource('events', EventController::class); 
 
-    Route::middleware(['admin'])->group(function () {
+    // Route::middleware(['admin'])->group(function () {
         Route::get('/events/create', [EventController::class, 'create'])->name('events.create');
         Route::post('/events', [EventController::class, 'store'])->name('events.store');
-    });
+    
 
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

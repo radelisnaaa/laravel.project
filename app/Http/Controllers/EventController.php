@@ -48,6 +48,7 @@ class EventController extends Controller
        $request->validate([
           'name' => 'required|string|max:255',
           'description' => 'required|string',
+          'speaker' => 'required|string',
           'zoom_link' => 'nullable|url',
           'date' => 'required|date',
           'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
@@ -79,6 +80,7 @@ class EventController extends Controller
         $event = Event::create([
             'name' => $request->name,
             'description' => $request->description,
+            'speaker' => $request->speaker,
             'zoom_link' => $request->zoom_link,
             'date' => $request->date,
             'image' => $image->hashName(),
