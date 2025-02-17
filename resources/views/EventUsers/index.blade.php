@@ -1,62 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Event Users</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css">
-</head>
-<body>
+@extends('layouts.app')
 
+@section('content')
 <div class="container mt-5">
-    <h1>Daftar Event Users</h1>
+    <h1 class="text-center mb-4 text-primary">Daftar Acara</h1>
 
-    <!-- Menampilkan pesan sukses atau error -->
-    @if(session('success'))
+    @if (session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
         </div>
-    @elseif(session('error'))
+    @endif
+
+    @if (session('error'))
         <div class="alert alert-danger">
             {{ session('error') }}
         </div>
     @endif
 
-    <!-- Tombol untuk menambahkan data baru -->
-    <a href="{{ route('eventusers.create') }}" class="btn btn-primary mb-3">Tambah Event User</a>
-
-    <!-- Tabel untuk menampilkan data EventUser -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Event</th>
-                <th>User</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($eventUsers as $eventUser)
+    <div class="card shadow-lg p-4">
+        <table class="table table-bordered table-hover text-center align-middle">
+            <thead class="table-dark">
                 <tr>
-                    <td>{{ $eventUser->id }}</td>
-                    <td>{{ $eventUser->event->name ?? 'Tidak ada event' }}</td> <!-- Menampilkan nama event -->
-                    <td>{{ $eventUser->user->name ?? 'Tidak ada user' }}</td> <!-- Menampilkan nama user -->
-                    <td>
-                        <!-- Tombol Edit dan Hapus -->
-                        <a href="{{ route('eventusers.edit', $eventUser->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                        <form action="{{ route('eventusers.destroy', $eventUser->id) }}" method="POST" style="display:inline;">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus data ini?')">Hapus</button>
-                        </form>
-                    </td>
+                    <th>No</th>
+                    <th>Gambar</th>
+                    <th>Nama Acara</th>
+                    <th>Pembicara</th>
+                    <th>Deskripsi</th>
+                    <th>Tanggal</th>
+                    <th>Aksi</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @forelse ($event as $event)
+                    <tr>
+                        <td>{{ $loop->iteration }}</td>
+                        <td>
+                            <img src="{{ Storage::url('images/' . $event->image) }}" alt="Gambar Acara" width="100" class="rounded">
+                        </td>
+                        <td>{{ $event->name }}</td>
+                        <td>{{ $event->speaker }}</td>
+                        <td>{{ $event->description }}</td>
+                        <td>{{ $event->date }}</td>
+                        <td>
+                            <a href="{{ route('events.show', $event->id) }}" class="btn btn-info btn-sm">Detail</a>
+                            @if (Auth::check() && Auth::id() === $event->user_id)
+                                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus acara ini?')">Hapus</button>
+                                </form>
+                            @endif
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="7" class="text-center">Tidak ada acara.</td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
+    </div>
+
+    @if (Auth::check())
+        <div class="d-grid gap-2 mt-3">
+            <a href="{{ route('events.create') }}" class="btn btn-primary">Tambah Acara Baru</a>
+        </div>
+    @else
+        <p class="text-center mt-3">Silakan <a href="{{ route('login') }}">login</a> untuk menambah acara.</p>
+    @endif
 </div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-</body>
-</html>
+@endsection

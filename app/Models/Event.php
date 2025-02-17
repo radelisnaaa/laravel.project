@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,4 +23,14 @@ class Event extends Model
         'created_at',
         'updated_at',
     ];
+
+    // protected $casts = [
+    //     'date' => 'datetime',
+    //     'price' => 'decimal:2',
+    // ];
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class, 'event_users');
+    }
 }

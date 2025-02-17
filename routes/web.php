@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EventController;
+use App\Models\Event;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventUserController;
@@ -19,10 +20,9 @@ Route::get('/user/{id}', [UserController::class, 'show']);
 
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
 
-Route::get('/', function () {
-    return view('welcome');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+Route::get('/home', function () {
+    $events = Event::all();
+    return view('home', compact('events'));
 });
 
 // Menghapus member dari event
@@ -31,14 +31,16 @@ Route::delete('/members/{memberId}/events/{eventId}', [MemberController::class, 
 Route::resource('/events', EventController::class);
 Route::resource('/users', UserController::class);
 Route::resource('eventusers', EventUserController::class);
-Route::resource('registrations', RegistrationController::class);
+
 
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/event-user', [EventUserController::class, 'index'])->name('event-user.index');
+    
     //Route::resource('events', EventController::class); 
 
     // Route::middleware(['admin'])->group(function () {

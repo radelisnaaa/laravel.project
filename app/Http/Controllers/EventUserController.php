@@ -3,16 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\EventUser; // Sesuaikan dengan nama model Anda
-use App\Models\Event; // Sesuaikan dengan nama model Anda
-use App\Models\User; // Sesuaikan dengan nama model Anda
+use Illuminate\Support\Facades\Auth;
+use App\Models\EventUser; 
+use App\Models\Event; 
+use App\Models\User; 
 
 class EventUserController extends Controller
 {
     public function index()
     {
-        $eventUsers = EventUser::all(); // Mengambil semua data event user
-        return view('eventusers.index', compact('eventUsers')); // Menampilkan data di view
+        $user = auth()->user(); // Ambil user yang sedang login
+       if (!$user) {
+            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu!');
+        }
+        $events = $user->events;
+         
+        return view('events.index', compact('events'));
     }
 
     public function create()

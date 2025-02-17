@@ -33,10 +33,11 @@ class User extends Authenticatable
     /**
      * Relasi jika user memiliki banyak event.
      */
-    public function events()
+    public function events(): BelongsToMany
     {
-        return $this->hasMany(Event::class, 'user_id');
+        return $this->belongsToMany(Event::class, 'event_users');
     }
+   
 }
 
 
