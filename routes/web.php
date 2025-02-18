@@ -5,7 +5,7 @@ use App\Models\Event;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventUserController;
-use App\Http\Controllers\RegistrationController;
+use App\Http\Controllers\TicketController;  
 use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [UserController::class, 'login'])->name('user.login');
@@ -31,6 +31,7 @@ Route::delete('/members/{memberId}/events/{eventId}', [MemberController::class, 
 Route::resource('/events', EventController::class);
 Route::resource('/users', UserController::class);
 Route::resource('eventusers', EventUserController::class);
+Route::resource('tickets', TicketController::class);
 
 
 
