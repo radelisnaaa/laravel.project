@@ -1,6 +1,7 @@
 <?php
+namespace App\Http\Middleware;
 
-use App\Middleware\AdminMiddleware;
+use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;

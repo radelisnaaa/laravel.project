@@ -16,6 +16,7 @@ class EventUserController extends Controller
        if (!$user) {
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu!');
         }
+    
         $events = $user->events;
          
         return view('events.index', compact('events'));

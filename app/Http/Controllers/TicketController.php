@@ -43,15 +43,15 @@ class TicketController extends Controller
             'quota' => 'required|integer'
         ]);
 
-        // Save ticket data
-        // $ticket = new Ticket();
-        // $ticket->event_id = $request->event_id;
-        // $ticket->ticket_type = $request->ticket_type;
-        // $ticket->price = $request->price;
-        // $ticket->quota = $request->quota;
-        // $ticket->save();
+        $ticket = Ticket::create([
+            'event_id' => $request->event_id,
+            'ticket_type' => $request->ticket_type,
+            'price' => $request->price,
+            'quota' => $request->quota,
+           
+        ]);
 
-        Ticket::create($request->all());
+ 
 
         return redirect()->route('tickets.index')->with('success', 'Ticket successfully added');
     }
