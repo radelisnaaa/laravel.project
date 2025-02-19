@@ -18,7 +18,7 @@ class EventUser extends Pivot
     // Relasi dengan Event
     public function event()
     {
-        return $this->belongsTo(Event::class);
+        return $this->belongsToMany(Event::class);
     }
 
     // Relasi dengan User

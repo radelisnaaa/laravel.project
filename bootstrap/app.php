@@ -1,5 +1,6 @@
 <?php
 
+use App\Middleware\AdminMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -11,8 +12,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        //Tambahkan middleware alias
+        $middleware->alias([
+            'admin' => AdminMiddleware::class,
+        ]);
+
     })
+   
     ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();

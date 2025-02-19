@@ -18,7 +18,7 @@ class User extends Authenticatable
         'role',
         'phone',
         'organization',
-       // 'avatar'
+       
     ];
 
     protected $hidden = [
@@ -33,9 +33,9 @@ class User extends Authenticatable
     /**
      * Relasi jika user memiliki banyak event.
      */
-    public function events(): BelongsToMany
+    public function events()
     {
-        return $this->belongsToMany(Event::class, 'event_users');
+        return $this->belongsToMany(Event::class);
     }
    
 }

@@ -5,6 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\Ticket;
 use App\Http\Requests\StoreTicketRequest;
 use App\Http\Requests\UpdateTicketRequest;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
 
 class TicketController extends Controller
 {
@@ -28,17 +34,26 @@ class TicketController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreTicketRequest $request)
+    public function store(Request $request)
     {
-        $validated = $request->validated([
+        $request->validate([
             'event_id' => 'required|exists:events,id',
             'ticket_type' => 'required|string',
             'price' => 'required|numeric',
             'quota' => 'required|integer'
         ]);
-        Ticket::create($validated);
-        return redirect()->route('tickets.index');
 
+        // Save ticket data
+        // $ticket = new Ticket();
+        // $ticket->event_id = $request->event_id;
+        // $ticket->ticket_type = $request->ticket_type;
+        // $ticket->price = $request->price;
+        // $ticket->quota = $request->quota;
+        // $ticket->save();
+
+        Ticket::create($request->all());
+
+        return redirect()->route('tickets.index')->with('success', 'Ticket successfully added');
     }
 
     /**
