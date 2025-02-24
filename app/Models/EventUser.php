@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class EventUser extends Pivot
 {
-    protected $table = 'event_users';
+    protected $table = 'event_user'; // Sesuaikan dengan nama tabel yang ada di database
 
     protected $fillable = [
         'event_id',
@@ -15,15 +15,15 @@ class EventUser extends Pivot
 
     public $timestamps = false; // Jika tabel tidak memiliki created_at & updated_at
 
-    // Relasi dengan Event
+    // Relasi dengan Event (Pivot hanya memiliki belongsTo, bukan belongsToMany)
     public function event()
     {
-        return $this->belongsToMany(Event::class);
+        return $this->belongsTo(Event::class, 'event_id');
     }
 
     // Relasi dengan User
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

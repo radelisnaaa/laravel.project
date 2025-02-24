@@ -10,6 +10,11 @@ use App\Http\Controllers\TicketController;
 // use App\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
+Route::get('/', function () {
+    return view('pages.index');
+});
+
+
 Route::post('/login', [UserController::class, 'login'])->name('user.login');
 
 //Route::post('/eventusers/{memberId}/events/{eventId}', [MemberController::class, 'joinEvent'])->name('members.joinEvent');
@@ -28,6 +33,10 @@ Route::post('/login', [UserController::class, 'login'])->name('user.login');
 
 
 Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+
+Route::get('/', function () {
+    return view('pages.index');
+});
 
 Route::get('/', function () {
     $events = Event::all();

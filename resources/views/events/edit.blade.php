@@ -27,7 +27,7 @@
 </head>
 <body>
 <div class="container mt-5">
-    <h1 class="text-center mb-4 text-primary">Tambah Acara Baru</h1>
+    <h1 class="text-center mb-4 text-primary">Edit Acara</h1>
 
     @if ($errors->any())
         <div class="alert alert-danger">
@@ -41,21 +41,23 @@
 
     <div class="card shadow-lg p-4">
         <div class="card-body">
-            <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
                 @csrf
+                @method('PUT')
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Nama Acara</label>
-                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" placeholder="Masukkan Nama Acara" required>
+                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name', $event->name) }}" required>
                     @error('name')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
+                
                 <div class="mb-3">
                     <label class="form-label fw-bold">Pembicara</label>
-                    <input type="text" class="form-control @error('speaker') is-invalid @enderror" name="speaker" value="{{ old('speaker') }}" placeholder="Masukkan Nama Pembicara" required>
+                    <input type="text" class="form-control @error('speaker') is-invalid @enderror" name="speaker" value="{{ old('speaker', $event->speaker) }}" required>
                     @error('speaker')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -65,7 +67,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Deskripsi Acara</label>
-                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" placeholder="Masukkan Deskripsi Acara" rows="3" required>{{ old('description') }}</textarea>
+                    <textarea class="form-control @error('description') is-invalid @enderror" name="description" rows="3" required>{{ old('description', $event->description) }}</textarea>
                     @error('description')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -75,7 +77,7 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Tanggal Acara</label>
-                    <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date') }}" required>
+                    <input type="date" class="form-control @error('date') is-invalid @enderror" name="date" value="{{ old('date', $event->date) }}" required>
                     @error('date')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -85,16 +87,17 @@
 
                 <div class="mb-3">
                     <label class="form-label fw-bold">Gambar Acara</label>
-                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image" required>
+                    <input type="file" class="form-control @error('image') is-invalid @enderror" name="image">
+                    <small class="text-muted">Kosongkan jika tidak ingin mengubah gambar</small>
                     @error('image')
                         <div class="invalid-feedback">
                             {{ $message }}
                         </div>
                     @enderror
                 </div>
-
+                
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">SIMPAN</button>
+                    <button type="submit" class="btn btn-primary">UPDATE</button>
                     <a href="{{ route('events.index') }}" class="btn btn-secondary">KEMBALI</a>
                 </div>
             </form>
