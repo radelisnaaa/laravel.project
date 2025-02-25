@@ -24,7 +24,7 @@ class OrderController extends Controller
         $ticket = Ticket::find($request->ticket_id);
         $event = $ticket->event;
 
-        if ($ticket->stock < $request->quantity) {
+        if ($ticket->quota < $request->quantity) {
             return response()->json(['message' => 'Stock tiket tidak cukup'], 400);
         }
 
@@ -39,7 +39,7 @@ class OrderController extends Controller
         ]);
 
         // Kurangi stok tiket
-        $ticket->decrement('stock', $request->quantity);
+        $ticket->decrement('quota', $request->quantity);
 
         // Daftarkan user ke event jika belum terdaftar
         EventUser::firstOrCreate([

@@ -137,7 +137,7 @@
                             <div class="ticket mb-4 p-3 border rounded">
                                 <h4>{{ $ticket->name }}</h4>
                                 <p>Harga: Rp{{ number_format($ticket->price) }}</p>
-                                <p>Stok: {{ $ticket->stock }}</p>
+                                <p>Kuota: {{ $ticket->quota }}</p>
                                 
                                 @php
                                     $userOrder = auth()->user()->orders()->where('ticket_id', $ticket->id)->first();
@@ -152,7 +152,7 @@
                                         <input type="hidden" name="event_id" value="{{ $event->id }}">
                                         <div class="mb-3">
                                             <label for="quantity-{{ $ticket->id }}" class="form-label">Jumlah:</label>
-                                            <input type="number" id="quantity-{{ $ticket->id }}" name="quantity" class="form-control" min="1" max="{{ $ticket->stock }}" required>
+                                            <input type="number" id="quantity-{{ $ticket->id }}" name="quantity" class="form-control" min="1" max="{{ $ticket->quota }}" required>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Beli Tiket</button>
                                     </form>

@@ -17,6 +17,23 @@ class TicketController extends Controller
     /**
      * Display a listing of the resource.
      */
+
+     public function buyTicket(Request $request, $eventId)
+    {
+        $event = Event::with('tickets')->findOrFail($eventId);
+        $ticket = $event->tickets->first(); // Ambil tiket terkait
+
+        if (!$ticket || $ticket->quota < $request->jumlah) {
+            return back()->with('error', 'Stok tiket tidak cukup.');
+        }
+
+        // Proses pengurangan stok
+        $ticket->quota -= $request->jumlah;
+        $ticket->save();
+
+        return back()->with('success', 'Tiket berhasil dibeli!');
+    }
+
     public function index()
     {
         $tickets = Ticket::all();
