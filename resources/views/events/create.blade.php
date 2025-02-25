@@ -119,7 +119,7 @@
                 </div>
 
                 <div class="d-grid gap-2">
-                    <button type="submit" class="btn btn-primary">EDIT</button>
+                    <button type="submit" class="btn btn-primary">SIMPAN</button>
                     <a href="{{ route('events.index') }}" class="btn btn-secondary">KEMBALI</a>
                 </div>
             </form>

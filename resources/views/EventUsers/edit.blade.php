@@ -38,15 +38,15 @@
         <div class="mb-3">
             <label for="event_id" class="form-label">Pilih Event</label>
             <select name="event_id" id="event_id" class="form-control @error('event_id') is-invalid @enderror" required>
-                <option value="" disabled>-- Pilih Event --</option>
-                @foreach($events as $event)
-                    <option value="{{ $event->id }}" {{ old('event_id', $eventUser->event_id) == $event->id ? 'selected' : '' }}>
-                        {{ $event->name }}
-                    </option>
-                @endforeach
+            <option value="" disabled>-- Pilih Event --</option>
+            @foreach($events as $event)
+                <option value="{{ $event->id }}" {{ old('event_id', $eventUser->event_id) == $event->id ? 'selected' : '' }}>
+                {{ $event->name }}
+                </option>
+            @endforeach
             </select>
             @error('event_id')
-                <div class="invalid-feedback">{{ $message }}</div>
+            <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
 

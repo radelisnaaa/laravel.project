@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\EventUserController;
 use App\Http\Controllers\TicketController; 
+use App\Http\Controllers\OrderController;
 // use App\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -49,6 +50,8 @@ Route::get('/', function () {
 Route::resource('/events', EventController::class);
 Route::resource('/users', UserController::class);
 Route::resource('eventusers', EventUserController::class);
+Route::resource('tickets', TicketController::class);
+Route::resource('orders', OrderController::class);
 
 
 
@@ -58,6 +61,7 @@ Route::get('/dashboard', function () {
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('tickets', TicketController::class)->except(['index', 'show']);
+    //Route::post('/orders', [OrderController::class, 'store']);
 
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');

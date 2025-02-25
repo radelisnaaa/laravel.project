@@ -30,9 +30,14 @@ class Event extends Model
     //     'price' => 'decimal:2',
     // ];
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
     public function users(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id')
-        ->using(EventUser::class);
+        return $this->belongsToMany(User::class, 'event_user')->withPivot('order_id')->withTimestamps();
+        
     }
 }

@@ -10,16 +10,19 @@ use App\Models\User;
 
 class EventUserController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         $user = auth()->user(); // Ambil user yang sedang login
        if (!$user) {
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu!');
         }
 
-        $user = User::find(1);
-        $events = $user->events;
-        $eventUsers = EventUser::with(['event', 'user'])->get();
+        // $user = User::find(1);
+        // $events = $user->events;
+        // $eventUsers = EventUser::with(['event', 'user'])->get();
+        $eventUser = EventUser::findOrFail($id);
+        $events = Event::all();
+        $users = User::all();
         return view('eventusers.index', compact('eventUsers'));
     }
 
@@ -45,10 +48,19 @@ class EventUserController extends Controller
         return redirect()->route('eventusers.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
+    public function show($id)
+    {
+        $eventUser = EventUser::findOrFail($id);
+        return view('eventusers.show', compact('eventUser'));
+    }
+
     public function edit($id)
     {
-        $eventUser = EventUser::find($id);
-        return view('eventusers.edit', compact('eventUser')); // Menampilkan form untuk mengedit data
+        $eventUser = EventUser::findOrFail($id);
+        $events = Event::all();
+        $users = User::all();
+
+        return view('eventusers.edit', compact('eventUser', 'events', 'users')); // Menampilkan form untuk mengedit data
     }
 
     public function update(Request $request, $id)
@@ -60,8 +72,14 @@ class EventUserController extends Controller
             // tambahkan validasi lain sesuai kebutuhan
         ]);
 
-        $eventUser = EventUser::find($id);
-        $eventUser->update($request->all()); // Mengupdate data
+        // $eventUser = EventUser::find($id);
+        // $eventUser->update($request->all()); // Mengupdate data
+
+        $eventUser = EventUser::findOrFail($id);
+        $eventUser->update([
+            'event_id' => $request->event_id,
+            'user_id' => $request->user_id,
+        ]);
         return redirect()->route('eventusers.index')->with('success', 'Data berhasil diupdate!');
     }
 

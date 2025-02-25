@@ -11,6 +11,7 @@ class EventUser extends Pivot
     protected $fillable = [
         'event_id',
         'user_id',
+        'order_id'
     ];
 
     public $timestamps = false; // Jika tabel tidak memiliki created_at & updated_at
@@ -25,5 +26,10 @@ class EventUser extends Pivot
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function order()
+    {
+        return $this->belongsTo(Order::class);
     }
 }

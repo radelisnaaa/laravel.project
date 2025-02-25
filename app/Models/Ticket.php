@@ -16,7 +16,12 @@ class Ticket extends Model
         'quota'
     ];
     
-    public function event() {
+    public function event() 
+    {
         return $this->belongsTo(Event::class);
+    }
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
     }
 }

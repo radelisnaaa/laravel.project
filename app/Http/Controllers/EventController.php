@@ -74,8 +74,10 @@ class EventController extends Controller
      */
     public function show($id)
     {
-        $event = Event::findOrFail($id); // Mengambil data acara berdasarkan ID
+        $event = Event::findOrFail($id);
+        //$event = Event::with('tickets')->findOrFail($id); // Mengambil data acara berdasarkan ID
         return view('events.show', compact('event')); // Mengirim data ke view
+
     }
     /**
      * Show the form for editing the specified resource.
