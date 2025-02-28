@@ -24,8 +24,8 @@ class TicketController extends Controller
         $ticket = $event->tickets->first(); // Ambil tiket terkait
 
         if (!$ticket || $ticket->quota < $request->jumlah) {
-            return back()->with('error', 'Stok tiket tidak cukup.');
-        }
+return back()->with('error', 'Stok tiket tidak cukup.');
+        }            
 
         // Proses pengurangan stok
         $ticket->quota -= $request->jumlah;

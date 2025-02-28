@@ -145,6 +145,10 @@
 
                                 @if($userOrder)
                                     <p class="text-success"><i class="fas fa-check-circle"></i> Anda sudah membeli tiket ini (Order ID: {{ $userOrder->id }})</p>
+                                    <a href="{{ route('orders.show', $userOrder->id) }}" class="btn btn-info btn-sm">
+                                        Lihat Orderan
+                                    </a>
+
                                 @else
                                     <form action="{{ route('orders.store') }}" method="POST" class="d-flex flex-column">
                                         @csrf

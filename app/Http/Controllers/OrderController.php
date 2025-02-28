@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StoreOrderRequest;
+use App\Http\Requests\UpdateOrderRequest;
 use App\Models\Order;
 use App\Models\Ticket;
 use App\Models\EventUser;
@@ -25,7 +27,7 @@ class OrderController extends Controller
         $event = $ticket->event;
 
         if ($ticket->quota < $request->quantity) {
-            return response()->json(['message' => 'Stock tiket tidak cukup'], 400);
+            return redirect()->route('events.index')->with('error', 'Not enough tickets available');
         }
 
         $totalPrice = $ticket->price * $request->quantity;
@@ -47,7 +49,24 @@ class OrderController extends Controller
             'event_id' => $event->id,
         ]);
 
-        return response()->json(['message' => 'Tiket berhasil dibeli', 'order' => $order]);
+        return redirect()->route('orders.show', $order->id)->with('success', 'Order created successfully');
     }
+
+    public function index()
+    {
+    // Mengambil semua order berdasarkan user yang sedang login
+    $orders = Order::where('user_id', Auth::id())->with('ticket.event')->get();
+
+    return view('orders.index', compact('orders'));
+    }
+
+    public function show($id)
+    {
+    //$tickets = Ticket::where('order_id', $orderId)->get();
+    $order = Order::findOrFail($id);
+
+    return view('orders.show', compact('order'));
+    }
+
 }
 

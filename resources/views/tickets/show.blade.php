@@ -30,6 +30,7 @@
 
             <div class="d-grid gap-2">
                 <a href="{{ route('events.index') }}" class="btn btn-secondary">KEMBALI</a>
+                <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-primary">EDIT</a>
             </div>
         </div>
     </div>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,21 +61,26 @@
 @forelse ($tickets as $ticket)
     <tr>
         <td>{{ $ticket->id }}</td>
-        <td>{{ $ticket->event_id }}</td>
+        <td>{{ $ticket->event->name }}</td>
         <td>{{ $ticket->ticket_type }}</td>
-        <td>{{ $ticket->price }}</td>
+        <td>{{ number_format($ticket->price, 2) }}</td>
         <td>{{ $ticket->quota }}</td>
         <td>
-          
-        <a href="{{ route('tickets.show', $ticket->id) }}" class="btn btn-info btn-sm">Detail</a>
-        @if (Auth::check() && Auth::id() === $ticket->user_id)
-            <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-warning btn-sm">Edit</a>
-            <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" class="d-inline">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus tiket ini?')">Hapus</button>
-            </form>
-        @endif
+            <a href="{{ route('tickets.show', $ticket->id) }}" class="btn btn-info btn-sm">
+                <i class="fas fa-info-circle"></i> Detail
+            </a>
+            @if (Auth::check() && (Auth::id() === $ticket->user_id || Auth::user()->is_admin))
+                <a href="{{ route('tickets.edit', $ticket->id) }}" class="btn btn-warning btn-sm">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <form action="{{ route('tickets.destroy', $ticket->id) }}" method="POST" class="d-inline">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus tiket ini?')">
+                        <i class="fas fa-trash-alt"></i> Hapus
+                    </button>
+                </form>
+            @endif
         </td>
     </tr>
 @empty
@@ -101,4 +105,6 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+
+
 
