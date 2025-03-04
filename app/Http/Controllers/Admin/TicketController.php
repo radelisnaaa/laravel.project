@@ -1,119 +1,74 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Ticket;
-use App\Http\Requests\StoreTicketRequest;
-use App\Http\Requests\UpdateTicketRequest;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
-
 
 class TicketController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Pastikan hanya admin yang bisa mengakses controller ini.
      */
+    protected $middleware = [
+        'auth',
+        'admin'
+    ];
 
-     public function buyTicket(Request $request, $eventId)
+    public function index(): View
     {
-        $event = Event::with('tickets')->findOrFail($eventId);
-        $ticket = $event->tickets->first(); // Ambil tiket terkait
-
-        if (!$ticket || $ticket->quota < $request->jumlah) {
-return back()->with('error', 'Stok tiket tidak cukup.');
-        }            
-
-        // Proses pengurangan stok
-        $ticket->quota -= $request->jumlah;
-        $ticket->save();
-
-        return back()->with('success', 'Tiket berhasil dibeli!');
+        $tickets = Ticket::with('event')->get();
+        return view('admin.tickets.index', compact('tickets'));
     }
 
-    public function index()
+    public function create(): View
     {
-        $tickets = Ticket::all();
-        return view('tickets.index', compact('tickets'));
+        $events = Event::all();
+        return view('admin.tickets.create', compact('events'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('tickets.create');
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $request->validate([
             'event_id' => 'required|exists:events,id',
-            'ticket_type' => 'required|string',
-            'price' => 'required|numeric',
-            'quota' => 'required|integer'
+            'ticket_type' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'quota' => 'required|integer|min:1',
         ]);
 
-        $ticket = Ticket::create([
-            'event_id' => $request->event_id,
-            'ticket_type' => $request->ticket_type,
-            'price' => $request->price,
-            'quota' => $request->quota,
-           
-        ]);
+        Ticket::create($request->all());
 
- 
-
-        return redirect()->route('tickets.index')->with('success', 'Ticket successfully added');
+        return redirect()->route('admin.tickets.index')->with('success', 'Tiket berhasil ditambahkan');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Ticket $ticket)
+    public function edit(Ticket $ticket): View
     {
-        return view('tickets.show', compact('ticket'));
+        $events = Event::all();
+        return view('admin.tickets.edit', compact('ticket', 'events'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Ticket $ticket)
+    public function update(Request $request, Ticket $ticket): RedirectResponse
     {
-        return view('tickets.edit', compact('ticket'));
-    }
-
-    
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateTicketRequest $request, Ticket $ticket)
-    {
-        $validated = $request->validated([
+        $request->validate([
             'event_id' => 'required|exists:events,id',
-            'ticket_type' => 'required|string',
-            'price' => 'required|numeric',
-            'quota' => 'required|integer'
+            'ticket_type' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'quota' => 'required|integer|min:1',
         ]);
-        $ticket->update($validated);
-        return redirect()->route('tickets.index')->with('success', 'Ticket updated successfully');
+
+        $ticket->update($request->all());
+
+        return redirect()->route('admin.tickets.index')->with('success', 'Tiket berhasil diperbarui');
     }
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Ticket $ticket)
+
+    public function destroy(Ticket $ticket): RedirectResponse
     {
         $ticket->delete();
-        return redirect()->route('tickets.index')->with('success', 'Ticket deleted successfully');
+        return redirect()->route('admin.tickets.index')->with('success', 'Tiket berhasil dihapus');
     }
-        //
-    }
-
-
+}

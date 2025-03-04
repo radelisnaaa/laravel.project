@@ -12,28 +12,22 @@ use Illuminate\View\View;
 
 class EventController extends Controller
 {
-    /**
-     * Menampilkan daftar semua event (untuk admin).
-     */
     public function index(): View
     {
+        $this->authorize('admin');
         $events = Event::all();
         return view('admin.events.index', compact('events'));
     }
 
-    /**
-     * Menampilkan form untuk membuat event baru (untuk admin).
-     */
     public function create(): View
     {
+        $this->authorize('admin');
         return view('admin.events.create');
     }
 
-    /**
-     * Menyimpan event baru (untuk admin).
-     */
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('admin');
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -60,27 +54,21 @@ class EventController extends Controller
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil dibuat');
     }
 
-    /**
-     * Menampilkan detail event tertentu (untuk admin).
-     */
     public function show(Event $event): View
     {
+        $this->authorize('admin');
         return view('admin.events.show', compact('event'));
     }
 
-    /**
-     * Menampilkan form edit event (untuk admin).
-     */
     public function edit(Event $event): View
     {
+        $this->authorize('admin');
         return view('admin.events.edit', compact('event'));
     }
 
-    /**
-     * Memperbarui event yang ada (untuk admin).
-     */
     public function update(Request $request, Event $event): RedirectResponse
     {
+        $this->authorize('admin');
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
@@ -108,14 +96,13 @@ class EventController extends Controller
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui');
     }
 
-    /**
-     * Menghapus event (untuk admin).
-     */
     public function destroy(Event $event): RedirectResponse
     {
+        $this->authorize('admin');
         Storage::delete('public/' . $event->image);
         $event->delete();
 
         return redirect()->route('admin.events.index')->with('success', 'Event berhasil dihapus');
     }
 }
+

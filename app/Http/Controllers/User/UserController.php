@@ -1,16 +1,15 @@
 <?php
 
-namespace App\Http\U\Controllers;
+namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\ValidationException;
 
 class UserController extends Controller
 {
-    /** 
+    /**
      * Menampilkan daftar semua pengguna.
      */
     public function index()
@@ -19,16 +18,17 @@ class UserController extends Controller
         return view('users.index', compact('users'));
     }
 
+    /**
+     * Menampilkan form untuk membuat pengguna baru.
+     */
     public function create()
     {
         return view('users.create');
     }
-    
 
     /**
-     * Menampilkan detail pengguna berdasarkan ID.
+     * Menyimpan pengguna baru ke database.
      */
-   
     public function store(Request $request)
     {
         $request->validate([
@@ -38,35 +38,32 @@ class UserController extends Controller
             'role' => 'required|in:admin,participant,organizer',
             'phone' => 'nullable|string|max:20',
             'organization' => 'nullable|string|max:255',
-           // 'avatar' => 'nullable|string'
         ]);
-    
-        $user = User::create([
+
+        User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role' => $request->role,
             'phone' => $request->phone,
             'organization' => $request->organization,
-           // 'avatar' => $request->avatar
         ]);
-    
+
         return redirect()->route('users.index')->with('message', 'User berhasil dibuat');
     }
 
+    /**
+     * Menampilkan detail pengguna berdasarkan ID.
+     */
     public function show($id)
     {
-        $user = User::find($id);
-    
-        if (!$user) {
-            return view('user.show', compact('user')); // Menampilkan halaman error jika user tidak ditemukan
-        } else {
-            return redirect()->route('users.show', compact('user'));
-        }
-    
+        $user = User::findOrFail($id);
         return view('users.show', compact('user'));
     }
 
+    /**
+     * Menampilkan form untuk mengedit pengguna.
+     */
     public function edit($id)
     {
         $user = User::findOrFail($id);
@@ -74,83 +71,71 @@ class UserController extends Controller
     }
 
     /**
-     * Menampilkan form untuk membuat pengguna baru.
-     */
-    
-    /**
      * Memperbarui data pengguna.
      */
     public function update(Request $request, $id)
     {
-        $user = User::find($id);
-    
-        if (!$user) {
-            return view('errors.404'); // Menampilkan halaman error jika user tidak ditemukan
-        }
-    
+        $user = User::findOrFail($id);
+
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'email' => 'sometimes|string|email|max:255|unique:users,email,' . $id,
-            'password' => 'sometimes|string|min:6',
+            'password' => 'nullable|string|min:6',
             'role' => 'sometimes|in:admin,participant,organizer',
             'phone' => 'nullable|string|max:20',
             'organization' => 'nullable|string|max:255',
-            //'avatar' => 'nullable|string'
         ]);
-    
-        if ($request->has('password')) {
-            $user->password = Hash::make($request->password);
+
+        $data = $request->except(['password']);
+
+        if ($request->filled('password')) {
+            $data['password'] = Hash::make($request->password);
         }
-    
-        $user->update($request->except('password'));
-    
+
+        $user->update($data);
+
         return redirect()->route('users.show', $id)->with('message', 'User berhasil diperbarui');
     }
-    
+
     /**
      * Menghapus pengguna.
      */
     public function destroy($id)
     {
-        $user = User::find($id);
-    
-        if (!$user) {
-            return view('errors.404'); // Menampilkan halaman error jika user tidak ditemukan
-        }
-    
+        $user = User::findOrFail($id);
         $user->delete();
-    
         return redirect()->route('users.index')->with('message', 'User berhasil dihapus');
     }
-    
 
     /**
      * Login pengguna.
      */
     public function login(Request $request)
     {
-        $request->validate([
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required'
         ]);
-    
-        if (!Auth::attempt($request->only('email', 'password'))) {
-            return redirect()->route('login')->withErrors(['email' => 'Email atau password salah']);
+
+        if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+            return redirect()->intended('dashboard')->with('message', 'Login berhasil');
         }
-    
-        $user = Auth::user();
-    
-        // Setelah login berhasil, alihkan ke dashboard atau halaman utama
-        return redirect()->route('dashboard')->with('message', 'Login berhasil');
+
+        return back()->withErrors([
+            'email' => 'Email atau password salah',
+        ]);
     }
-    
+
     /**
      * Logout pengguna.
      */
     public function logout(Request $request)
-{
-    $request->user()->tokens()->delete();
-    return redirect()->route('login')->with('message', 'Logout berhasil');
-}
+    {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
+        return redirect()->route('login')->with('message', 'Logout berhasil');
+    }
 }

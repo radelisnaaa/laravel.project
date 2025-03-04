@@ -1,92 +1,97 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\EventUser; 
-use App\Models\Event; 
-use App\Models\User; 
+use Illuminate\View\View;
+use App\Models\EventUser;
+use App\Models\Event;
+use App\Models\User;
 
 class EventUserController extends Controller
 {
+    protected $middleware = ['auth', 'admin']; // Pastikan pengguna login dan hanya admin yang bisa mengakses controller ini
+
+    /**
+     * Menampilkan daftar event user (khusus admin).
+     */
     public function index(): View
     {
-        $user = auth()->user(); // Ambil user yang sedang login
-       if (!$user) {
-            return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu!');
-        }
+        $eventUsers = EventUser::with(['event', 'user'])->get();
+        return view('admin.eventusers.index', compact('eventUsers'));
+    }
 
-        // $user = User::find(1);
-        // $events = $user->events;
-        // $eventUsers = EventUser::with(['event', 'user'])->get();
-        $eventUser = EventUser::findOrFail($id);
+    /**
+     * Menampilkan form untuk membuat data event user (khusus admin).
+     */
+    public function create(): View
+    {
         $events = Event::all();
         $users = User::all();
-        return view('eventusers.index', compact('eventUsers'));
+        return view('admin.eventusers.create', compact('events', 'users'));
     }
 
-    public function create()
-    {
-        $events = Event::all(); // Mengambil semua data event
-        $users = User::all(); // Mengambil semua data user
-
-        return view('eventusers.create', compact('events', 'users')); // Menampilkan form untuk membuat data baru
-
-    }
-
+    /**
+     * Menyimpan data event user baru (khusus admin).
+     */
     public function store(Request $request)
     {
-        // Validasi data yang masuk
         $request->validate([
-            'event_id' => 'required|exists:events,id', // Contoh validasi
-            'user_id' => 'required|exists:users,id', // Contoh validasi
-            // tambahkan validasi lain sesuai kebutuhan
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        EventUser::create($request->all()); // Menyimpan data baru
-        return redirect()->route('eventusers.index')->with('success', 'Data berhasil ditambahkan!');
+        EventUser::create($request->all());
+
+        return redirect()->route('admin.eventusers.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
-    public function show($id)
+    /**
+     * Menampilkan detail event user tertentu (khusus admin).
+     */
+    public function show($id): View
     {
-        $eventUser = EventUser::findOrFail($id);
-        return view('eventusers.show', compact('eventUser'));
+        $eventUser = EventUser::with(['event', 'user'])->findOrFail($id);
+        return view('admin.eventusers.show', compact('eventUser'));
     }
 
-    public function edit($id)
+    /**
+     * Menampilkan form edit event user (khusus admin).
+     */
+    public function edit($id): View
     {
         $eventUser = EventUser::findOrFail($id);
         $events = Event::all();
         $users = User::all();
-
-        return view('eventusers.edit', compact('eventUser', 'events', 'users')); // Menampilkan form untuk mengedit data
+        return view('admin.eventusers.edit', compact('eventUser', 'events', 'users'));
     }
 
+    /**
+     * Memperbarui data event user (khusus admin).
+     */
     public function update(Request $request, $id)
     {
-        // Validasi data yang masuk
         $request->validate([
-            'event_id' => 'required|exists:events,id', // Contoh validasi
-            'user_id' => 'required|exists:users,id', // Contoh validasi
-            // tambahkan validasi lain sesuai kebutuhan
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
         ]);
-
-        // $eventUser = EventUser::find($id);
-        // $eventUser->update($request->all()); // Mengupdate data
 
         $eventUser = EventUser::findOrFail($id);
-        $eventUser->update([
-            'event_id' => $request->event_id,
-            'user_id' => $request->user_id,
-        ]);
-        return redirect()->route('eventusers.index')->with('success', 'Data berhasil diupdate!');
+        $eventUser->update($request->all());
+
+        return redirect()->route('admin.eventusers.index')->with('success', 'Data berhasil diperbarui!');
     }
 
+    /**
+     * Menghapus event user (khusus admin).
+     */
     public function destroy($id)
     {
-        $eventUser = EventUser::find($id);
-        $eventUser->delete(); // Menghapus data
-        return redirect()->route('eventusers.index')->with('success', 'Data berhasil dihapus!');
+        $eventUser = EventUser::findOrFail($id);
+        $eventUser->delete();
+
+        return redirect()->route('admin.eventusers.index')->with('success', 'Data berhasil dihapus!');
     }
 }

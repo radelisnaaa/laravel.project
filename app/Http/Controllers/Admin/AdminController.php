@@ -11,13 +11,11 @@ use App\Models\Payment;
 
 class AdminController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('auth'); // Pastikan hanya pengguna yang terautentikasi yang bisa mengakses
-    }
-
     public function index()
     {
+        $this->middleware('auth'); // Pastikan hanya pengguna yang terautentikasi yang bisa mengakses
+
+
         $events = Event::all();
         $orders = Order::all();
         $users = User::all();
@@ -37,3 +35,4 @@ class AdminController extends Controller
         ));
     }
 }
+
