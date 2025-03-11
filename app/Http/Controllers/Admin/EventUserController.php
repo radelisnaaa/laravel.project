@@ -12,7 +12,7 @@ use App\Models\User;
 
 class EventUserController extends Controller
 {
-    protected $middleware = ['auth', 'admin']; // Pastikan pengguna login dan hanya admin yang bisa mengakses controller ini
+    // protected $middleware = ['auth', 'admin']; // Pastikan pengguna login dan hanya admin yang bisa mengakses controller ini
 
     /**
      * Menampilkan daftar event user (khusus admin).

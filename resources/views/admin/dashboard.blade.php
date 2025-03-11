@@ -24,8 +24,8 @@
                 <div class="card text-white bg-primary mb-3">
                     <div class="card-header">Event</div>
                     <div class="card-body">
-                        <!-- <h5 class="card-title">{{ count($events) }} Events</h5> -->
-                        <a href="{{ route('events.index') }}" class="btn btn-light">Kelola Event</a>
+                        <h5 class="card-title">{{ count($events ?? []) }} Events</h5>
+                        <a href="{{ route('admin.events.index') }}" class="btn btn-light">Kelola Event</a>
                     </div>
                 </div>
             </div>
@@ -35,8 +35,8 @@
                 <div class="card text-white bg-success mb-3">
                     <div class="card-header">Orders</div>
                     <div class="card-body">
-                        <!-- <h5 class="card-title">{{ count($orders) }} Orders</h5> -->
-                        <a href="{{ route('orders.index') }}" class="btn btn-light">Kelola Orders</a>
+                        <h5 class="card-title">{{ count($orders ?? []) }} Orders</h5>
+                        <a href="{{ route('admin.orders.index') }}" class="btn btn-light">Kelola Orders</a>
                     </div>
                 </div>
             </div>
@@ -46,8 +46,8 @@
                 <div class="card text-white bg-warning mb-3">
                     <div class="card-header">Users</div>
                     <div class="card-body">
-                        <!-- <h5 class="card-title">{{ count($users) }} Users</h5> -->
-                        <a href="{{ route('users.index') }}" class="btn btn-light">Kelola Users</a>
+                        <h5 class="card-title">{{ count($users ?? []) }} Users</h5>
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-light">Kelola Users</a>
                     </div>
                 </div>
             </div>
@@ -57,8 +57,8 @@
                 <div class="card text-white bg-danger mb-3">
                     <div class="card-header">Tickets</div>
                     <div class="card-body">
-                        <!-- <h5 class="card-title">{{ count($tickets) }} Tickets</h5> -->
-                        <a href="{{ route('tickets.index') }}" class="btn btn-light">Kelola Tickets</a>
+                        <h5 class="card-title">{{ count($tickets ?? []) }} Tickets</h5>
+                        <a href="{{ route('admin.tickets.index') }}" class="btn btn-light">Kelola Tickets</a>
                     </div>
                 </div>
             </div>
@@ -68,8 +68,8 @@
                 <div class="card text-white bg-info mb-3">
                     <div class="card-header">Payments</div>
                     <div class="card-body">
-                        <h5 class="card-title">{{ count($payments) }} Payments</h5>
-                        <a href="{{ route('payments.index') }}" class="btn btn-light">Kelola Payments</a>
+                        <h5 class="card-title">{{ count($payments ?? []) }} Payments</h5>
+                        <a href="{{ route('admin.payments.index') }}" class="btn btn-light">Kelola Payments</a>
                     </div>
                 </div>
             </div>

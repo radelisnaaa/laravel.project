@@ -13,11 +13,16 @@ use Illuminate\Http\RedirectResponse;
 
 class OrderController extends Controller
 {
-    protected function middleware()
-    {
-        $this->middleware('auth');  // Pastikan pengguna login
-        $this->middleware('admin'); // Hanya admin yang bisa mengakses controller ini
-    }
+    // protected function middleware()
+    // {
+    //     $this->middleware('auth');  // Pastikan pengguna login
+    //     $this->middleware('admin'); // Hanya admin yang bisa mengakses controller ini
+    // }
+    
+    // protected $middleware = [
+    //     'auth',
+    //     'admin'
+    // ];
 
     /**
      * Menampilkan semua order (khusus admin).

@@ -12,9 +12,9 @@ class UserController extends Controller
     /**
      * Middleware untuk membatasi akses hanya untuk admin.
      */
-    protected $middleware = ['admin'];
+    // protected $middleware = ['admin'];
 
-    /**
+    /**                                                                                                       
      * Menampilkan daftar semua user.
      */
     public function index()

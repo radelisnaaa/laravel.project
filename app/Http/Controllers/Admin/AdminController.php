@@ -1,38 +1,40 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
 use App\Models\Order;
 use App\Models\User;
 use App\Models\Ticket;
-use App\Models\Payment;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function __construct()
     {
-        $this->middleware('auth'); // Pastikan hanya pengguna yang terautentikasi yang bisa mengakses
+        // Pastikan hanya admin yang bisa mengakses
+        // $this->middleware(['auth', 'admin']);
+    }
 
-
+    public function adminDashboard()
+    {
+        // Ambil semua data dari database
         $events = Event::all();
         $orders = Order::all();
         $users = User::all();
         $tickets = Ticket::all();
-        $payments = Payment::all();
 
         // Hitung jumlah entitas untuk ditampilkan di dashboard
-        $jumlahEvent = is_countable($events) ? count($events) : 0;
-        $jumlahOrder = is_countable($orders) ? count($orders) : 0;
-        $jumlahUser = is_countable($users) ? count($users) : 0;
-        $jumlahTicket = is_countable($tickets) ? count($tickets) : 0;
-        $jumlahPayment = is_countable($payments) ? count($payments) : 0;
+        $jumlahEvent = $events->count();
+        $jumlahOrder = $orders->count();
+        $jumlahUser = $users->count();
+        $jumlahTicket = $tickets->count();
 
+        // Kirim data ke tampilan
         return view('admin.dashboard', compact(
-            'events', 'orders', 'users', 'tickets', 'payments',
-            'jumlahEvent', 'jumlahOrder', 'jumlahUser', 'jumlahTicket', 'jumlahPayment'
+            'events', 'orders', 'users', 'tickets',
+            'jumlahEvent', 'jumlahOrder', 'jumlahUser', 'jumlahTicket'
         ));
     }
 }
-

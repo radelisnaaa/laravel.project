@@ -4,89 +4,93 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\View\View;
 use App\Models\EventUser; 
 use App\Models\Event; 
 use App\Models\User; 
 
 class EventUserController extends Controller
 {
+    // Menampilkan daftar event users
     public function index(): View
     {
         $user = auth()->user(); // Ambil user yang sedang login
-       if (!$user) {
+        if (!$user) {
             return redirect()->route('login')->with('error', 'Anda harus login terlebih dahulu!');
         }
 
-        // $user = User::find(1);
-        // $events = $user->events;
-        // $eventUsers = EventUser::with(['event', 'user'])->get();
-        $eventUser = EventUser::findOrFail($id);
-        $events = Event::all();
-        $users = User::all();
+        // Ambil semua data EventUser dengan relasi event dan user
+        $eventUsers = EventUser::with(['event', 'user'])->get();
+        
         return view('eventusers.index', compact('eventUsers'));
     }
 
-    public function create()
+    // Menampilkan halaman form tambah event user
+    public function create(): View
     {
-        $events = Event::all(); // Mengambil semua data event
-        $users = User::all(); // Mengambil semua data user
+        $events = Event::all(); // Mengambil semua event
+        $users = User::all(); // Mengambil semua user
 
-        return view('eventusers.create', compact('events', 'users')); // Menampilkan form untuk membuat data baru
-
+        return view('eventusers.create', compact('events', 'users'));
     }
 
+    // Menyimpan data event user yang baru
     public function store(Request $request)
     {
-        // Validasi data yang masuk
+        // Validasi input
         $request->validate([
-            'event_id' => 'required|exists:events,id', // Contoh validasi
-            'user_id' => 'required|exists:users,id', // Contoh validasi
-            // tambahkan validasi lain sesuai kebutuhan
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        EventUser::create($request->all()); // Menyimpan data baru
+        // Menyimpan data baru
+        EventUser::create($request->only(['event_id', 'user_id']));
+        
         return redirect()->route('eventusers.index')->with('success', 'Data berhasil ditambahkan!');
     }
 
-    public function show($id)
+    // Menampilkan detail event user tertentu
+    public function show($id): View
     {
         $eventUser = EventUser::findOrFail($id);
         return view('eventusers.show', compact('eventUser'));
     }
 
-    public function edit($id)
+    // Menampilkan halaman edit event user
+    public function edit($id): View
     {
         $eventUser = EventUser::findOrFail($id);
         $events = Event::all();
         $users = User::all();
 
-        return view('eventusers.edit', compact('eventUser', 'events', 'users')); // Menampilkan form untuk mengedit data
+        return view('eventusers.edit', compact('eventUser', 'events', 'users'));
     }
 
+    // Mengupdate data event user tertentu
     public function update(Request $request, $id)
     {
-        // Validasi data yang masuk
+        // Validasi input
         $request->validate([
-            'event_id' => 'required|exists:events,id', // Contoh validasi
-            'user_id' => 'required|exists:users,id', // Contoh validasi
-            // tambahkan validasi lain sesuai kebutuhan
+            'event_id' => 'required|exists:events,id',
+            'user_id' => 'required|exists:users,id',
         ]);
 
-        // $eventUser = EventUser::find($id);
-        // $eventUser->update($request->all()); // Mengupdate data
-
+        // Cari data EventUser berdasarkan ID
         $eventUser = EventUser::findOrFail($id);
-        $eventUser->update([
-            'event_id' => $request->event_id,
-            'user_id' => $request->user_id,
-        ]);
-        return redirect()->route('eventusers.index')->with('success', 'Data berhasil diupdate!');
+
+        // Update data event user
+        $eventUser->update($request->only(['event_id', 'user_id']));
+        
+        return redirect()->route('eventusers.index')->with('success', 'Data berhasil diperbarui!');
     }
 
+    // Menghapus event user tertentu
     public function destroy($id)
     {
-        $eventUser = EventUser::find($id);
-        $eventUser->delete(); // Menghapus data
+        // Cari data EventUser berdasarkan ID dan hapus
+        $eventUser = EventUser::findOrFail($id);
+        $eventUser->delete();
+
         return redirect()->route('eventusers.index')->with('success', 'Data berhasil dihapus!');
     }
 }

@@ -15,10 +15,10 @@ class TicketController extends Controller
     /**
      * Pastikan hanya admin yang bisa mengakses controller ini.
      */
-    protected $middleware = [
-        'auth',
-        'admin'
-    ];
+    // protected $middleware = [
+    //     'auth',
+    //     'admin'
+    // ];
 
     public function index(): View
     {
