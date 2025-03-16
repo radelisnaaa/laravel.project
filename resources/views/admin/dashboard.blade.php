@@ -63,21 +63,16 @@
                 </div>
             </div>
 
-            <!-- Payment Management -->
-            <div class="col-md-4">
-                <div class="card text-white bg-info mb-3">
-                    <div class="card-header">Payments</div>
-                    <div class="card-body">
-                        <h5 class="card-title">{{ count($payments ?? []) }} Payments</h5>
-                        <a href="{{ route('admin.payments.index') }}" class="btn btn-light">Kelola Payments</a>
-                    </div>
-                </div>
-            </div>
-        </div>
+            
 
-        <div class="text-center mt-4">
-            <a href="{{ route('logout') }}" class="btn btn-danger">Logout</a>
-        </div>
-    </div>
+            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+    @csrf
+    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+        @csrf
+    </form>
+    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-danger mt-3">Logout</a>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
