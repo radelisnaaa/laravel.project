@@ -7,22 +7,35 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ticket extends Model
 {
-    /** @use HasFactory<\Database\Factories\TicketFactory> */
     use HasFactory;
+
     protected $fillable = [
         'event_id', 
         'ticket_type', 
         'price', 
-        'quota'
+        'quota' // ini bisa kamu anggap sebagai stok
     ];
     
-    public function event() 
+    public function event()
     {
         return $this->belongsTo(Event::class);
     }
+
+    // Menghubungkan ke banyak order (satu tiket bisa dibeli oleh banyak user)
     public function orders()
     {
-        return $this->belongsTo(Order::class, 'order_id');
+        return $this->hasMany(Order::class);
     }
 
+    // Opsional: total yang sudah dipesan
+    public function totalOrdered()
+    {
+        return $this->orders()->sum('quantity');
+    }
+
+    // Opsional: stok tersisa
+    public function getRemainingStockAttribute()
+    {
+        return $this->quota - $this->totalOrdered();
+    }
 }

@@ -131,10 +131,10 @@
         </nav>
         <section class="hero">
             <div class="hero-content">
-                <h1 class="animate__animated animate__fadeInDown">Event Virtual yang Tak Terlupakan</h1>
-                <p class="animate__animated animate__fadeInUp">Rasakan pengalaman event virtual yang luar biasa bersama
+                <h1 class="animate_animated animate_fadeInDown">Event Virtual yang Tak Terlupakan</h1>
+                <p class="animate_animated animate_fadeInUp">Rasakan pengalaman event virtual yang luar biasa bersama
                     kami.</p>
-                <button class="btn btn-primary animate__animated animate__zoomIn">Daftar Sekarang</button>
+                <button class="btn btn-primary animate_animated animate_zoomIn">Daftar Sekarang</button>
             </div>
         </section>
     </header>
