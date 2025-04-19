@@ -30,7 +30,8 @@ class OrderController extends Controller
     public function index(): View
     {
         $orders = Order::with(['user', 'ticket.event'])->get();
-        return view('admin.orders.index', compact('orders'));
+        $tickets = Ticket::with('event')->get();
+        return view('admin.orders.index', compact('orders', 'tickets'));
     }
 
     /**

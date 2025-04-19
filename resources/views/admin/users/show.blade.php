@@ -22,6 +22,6 @@
     <p><strong>Organisasi:</strong> {{ $user->organization }}</p>
     //<p><strong>Avatar:</strong> <img src="{{ $user->avatar }}" alt="Avatar" width="100"></p>
 
-    <a href="{{ route('users.index') }}">Kembali ke Daftar Pengguna</a>
+    <a href="{{ route('admin.users.index') }}">Kembali ke Daftar Pengguna</a>
 </body>
 </html>

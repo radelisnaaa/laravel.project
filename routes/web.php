@@ -26,6 +26,11 @@ Route::get('/', function () {
     return view('home', compact('events'));
 })->name('home');
 
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth'])->name('dashboard');
+
+
 // Halaman detail event
 Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
 
@@ -53,17 +58,25 @@ Route::middleware(['auth'])->group(function () {
 |--------------------------------------------------------------------------
 | Hanya bisa diakses oleh user dengan role admin.
 */
-Route::prefix('admin')->middleware(['auth', 'admin'])->as('admin.')->group(function () {
-    Route::get('/dashboard', [AdminController::class, 'adminDashboard'])->name('dashboard');
+Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/dashboard', function () {
+        // Controller atau closure untuk tampilan dashboard
+        return view('admin.dashboard', [
+            'events' => \App\Models\Event::all(),
+            'orders' => \App\Models\Order::all(),
+            'users' => \App\Models\User::all(),
+            'tickets' => \App\Models\Ticket::all()
+        ]);
+    })->name('dashboard');
 
-    Route::resources([
-        'events'  => AdminEventController::class,
-        'orders'  => AdminOrderController::class,
-        'users'   => AdminUserController::class,
-        'tickets' => AdminTicketController::class,
-    ]);
+    Route::resource('events', AdminEventController::class);
+    Route::resource('orders', AdminOrderController::class);
+    Route::resource('users', AdminUserController::class);
+    Route::resource('tickets', AdminTicketController::class);
 });
 
+
+    
 /*
 |--------------------------------------------------------------------------
 | Tambahkan route autentikasi jika file auth.php ada

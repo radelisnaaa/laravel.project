@@ -36,7 +36,7 @@
 
     @if (Auth::check() && Auth::user()->role === 'admin')
         <div class="mb-3">
-            <a href="{{ route('events.create') }}" class="btn btn-primary">Tambah Acara Baru</a>
+            <a href="{{ route('admin.events.create') }}" class="btn btn-primary">Tambah Acara Baru</a>
         </div>
 
         @if (session('success'))
@@ -69,8 +69,8 @@
                                 <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" width="100">
                             </td>
                             <td>
-                                <a href="{{ route('events.edit', $event->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                                <form action="{{ route('events.destroy', $event->id) }}" method="POST" class="d-inline">
+                                <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                                <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus acara ini?')">Hapus</button>

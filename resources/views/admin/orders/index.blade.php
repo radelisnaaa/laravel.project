@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daftar Acara</title>
+    <title>Daftar Pesanan Tiket</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -56,8 +56,9 @@
     </style>
 </head>
 
+<body>
 <div class="container mt-5">
-    <h2 class="mb-4">Daftar Tiket yang Anda Beli</h2>
+    <h2 class="mb-4">Daftar Semua Pesanan Tiket</h2>
 
     @if($orders->count() > 0)
         <div class="row">
@@ -67,7 +68,9 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $order->ticket->name }}</h5>
                             <p class="card-text"><strong>Event:</strong> {{ $order->ticket->event->name }}</p>
-                            <p class="card-text"><strong>Jumlah:</strong> {{ $order->quantity }}</p>
+                            <p class="card-text"><strong>Pemesan:</strong> {{ $order->user->name }} ({{ $order->user->email }})</p>
+                            <p class="card-text"><strong>Jumlah Dibeli:</strong> {{ $order->quantity }}</p>
+                            <p class="card-text"><strong>Stok Tersisa:</strong> {{ $order->ticket->stock }}</p>
                             <p class="card-text"><strong>Total Harga:</strong> Rp{{ number_format($order->total_price) }}</p>
                             <p class="card-text"><strong>Tanggal Pembelian:</strong> {{ $order->created_at->format('d F Y') }}</p>
                             <a href="{{ route('orders.show', $order->id) }}" class="btn btn-primary">
@@ -79,11 +82,38 @@
             @endforeach
         </div>
     @else
-        <p class="text-muted">Anda belum membeli tiket apapun.</p>
+        <p class="text-muted">Belum ada pesanan tiket yang dibuat.</p>
     @endif
 
-    <a href="{{ route('events.index') }}" class="btn btn-secondary mt-3">
+    <hr class="my-5">
+
+    <h2 class="mb-4">Daftar Tiket Tersedia</h2>
+    @if($tickets->count() > 0)
+        <div class="row">
+            @foreach ($tickets as $ticket)
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ $ticket->name }}</h5>
+                            <p class="card-text"><strong>Event:</strong> {{ $ticket->event->name }}</p>
+                            <p class="card-text"><strong>Harga:</strong> Rp{{ number_format($ticket->price) }}</p>
+                            <p class="card-text">
+                            <p class="card-text">
+                             <strong>Stok:</strong> 
+                            {{ $ticket->stock > 0 ? $ticket->stock . ' tersedia' : 'Stok habis' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @else
+        <p class="text-muted">Belum ada tiket tersedia.</p>
+    @endif
+
+    <a href="{{ route('admin.events.index') }}" class="btn btn-secondary mt-3">
         <i class="fas fa-arrow-left"></i> Kembali ke Event
     </a>
 </div>
-
+</body>
+</html>

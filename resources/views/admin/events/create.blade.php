@@ -47,7 +47,7 @@
 
         <div class="card shadow-lg p-4">
             <div class="card-body">
-                <form action="{{ route('events.store') }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="mb-3">
@@ -92,7 +92,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">SIMPAN</button>
-                        <a href="{{ route('events.index') }}" class="btn btn-secondary">KEMBALI</a>
+                        <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">KEMBALI</a>
                     </div>
                 </form>
             </div>

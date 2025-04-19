@@ -67,7 +67,7 @@
 
     <div class="card shadow-lg p-4">
         <div class="card-body">
-            <form action="{{ route('tickets.store') }}" method="POST" enctype="multipart/form-data">
+            <form action="{{ route('admin.tickets.store') }}" method="POST" enctype="multipart/form-data">
                 @csrf
 
                 <div class="mb-3">
@@ -118,7 +118,7 @@
 
                 <div class="d-grid gap-2">
                     <button type="submit" class="btn btn-primary">SIMPAN</button>
-                    <a href="{{ route('tickets.index') }}" class="btn btn-secondary">KEMBALI</a>
+                    <a href="{{ route('admin.tickets.index') }}" class="btn btn-secondary">KEMBALI</a>
                 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

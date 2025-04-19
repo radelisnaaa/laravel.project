@@ -9,11 +9,11 @@
 <body>
     <div class="container mt-5">
         <h1 class="text-center text-primary">Admin Dashboard</h1>
-        
+
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
-        
+
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
@@ -62,17 +62,16 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            
+        <!-- Logout -->
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+            @csrf
+        </form>
+        <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-danger mt-3">Logout</a>
 
-            <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-    @csrf
-    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-        @csrf
-    </form>
-    <a href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="btn btn-danger mt-3">Logout</a>
-</div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -47,7 +47,7 @@
 
         <div class="card shadow-lg p-4">
             <div class="card-body">
-                <form action="{{ route('events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('admin.events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -96,7 +96,7 @@
 
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-primary">SIMPAN PERUBAHAN</button>
-                        <a href="{{ route('events.index') }}" class="btn btn-secondary">KEMBALI</a>
+                        <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">KEMBALI</a>
                     </div>
                 </form>
             </div>

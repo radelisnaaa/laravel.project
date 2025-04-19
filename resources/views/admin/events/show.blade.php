@@ -47,7 +47,7 @@
                 <p class="card-text"><strong>Tanggal:</strong> {{ $event->date }}</p>
 
                 <div class="d-grid gap-2">
-                    <a href="{{ route('events.index') }}" class="btn btn-secondary">Kembali ke Daftar Acara</a>
+                    <a href="{{ route('admin.events.index') }}" class="btn btn-secondary">Kembali ke Daftar Acara</a>
                 </div>
             </div>
         </div>

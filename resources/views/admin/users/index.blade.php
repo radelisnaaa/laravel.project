@@ -95,11 +95,11 @@
                                     @endif
                                 </td>
                                 <td>
-                                    <a href="{{ route('users.show', $user->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye me-1"></i>Detail</a>
+                                    <a href="{{ route('admin.users.show', $user->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye me-1"></i>Detail</a>
                                     @if (Auth::check() && Auth::id() === $user->id)
-                                        <a href="{{ route('users.edit', $user->id) }}"
+                                        <a href="{{ route('admin.users.edit', $user->id) }}"
                                             class="btn btn-warning btn-sm"><i class="fas fa-edit me-1"></i>Edit</a>
-                                        <form action="{{ route('users.destroy', $user->id) }}" method="POST"
+                                        <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST"
                                             class="d-inline">
                                             @csrf
                                             @method('DELETE')
@@ -121,7 +121,7 @@
 
         @if (Auth::check())
             <div class="d-grid gap-2 mt-3">
-                <a href="{{ route('events.create') }}" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Tambah Acara
+                <a href="{{ route('admin.events.create') }}" class="btn btn-primary"><i class="fas fa-plus me-1"></i>Tambah Acara
                     Baru</a>
             </div>
         @else

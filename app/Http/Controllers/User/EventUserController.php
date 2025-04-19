@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Models\Event;
 
-class EventUserController extends Controller
+class UserEventController extends Controller
 {
     public function index()
     {
-        $events = Event::all();
-        return view('events.index', compact('events'));
+        $events = Event::latest()->paginate(10); // bisa pakai paginate atau all()
+        return view('user.events.index', compact('events'));
     }
 
     public function show($id)
     {
-        $event = Event::findOrFail($id);
-        return view('events.show', compact('event'));
+        $event = Event::with('tickets')->findOrFail($id);
+        return view('user.events.show', compact('event'));
     }
 }

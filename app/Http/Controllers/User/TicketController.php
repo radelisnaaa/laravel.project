@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\User;
 
-use Illuminate\Http\Request;
-use App\Models\Ticket;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Order;
 
-class TicketController extends Controller
+class UserTicketController extends Controller
 {
     public function index()
     {
-        $tickets = Ticket::all();
-        return view('tickets.index', compact('tickets'));
-    }
+        $user = Auth::user();
 
-    public function show($id)
-    {
-        $ticket = Ticket::findOrFail($id);
-        return view('tickets.show', compact('ticket'));
+        // Ambil semua tiket dari order user
+        $orders = $user->orders()->with('ticket.event')->get();
+
+        return view('user.tickets.index', compact('orders'));
     }
 }
