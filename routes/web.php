@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\TicketController as AdminTicketController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\EventUserController as AdminEventUserController;
+use App\Http\Controllers\User\DashboardController;
 use App\Models\Event;
 
 /*
@@ -74,6 +75,20 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('users', AdminUserController::class);
     Route::resource('tickets', AdminTicketController::class);
 });
+
+Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->controller(DashboardController::class)->group(function () {
+    Route::get('/dashboard', 'index')->name('dashboard');
+    Route::get('/events/{event}', 'showEvent')->name('events.show');
+    Route::get('/profile/edit', 'editProfile')->name('profile.edit');
+    Route::post('/profile/update', 'updateProfile')->name('profile.update');
+    Route::get('/profile/history', 'purchaseHistory')->name('profile.history');
+    Route::get('/notifications', 'notifications')->name('notifications.index');
+});
+
+
+Route::get('/events/{event}', [PublicEventController::class, 'show'])->name('public.events.show');
+Route::get('/profile', [UserProfileController::class, 'index'])->name('user.profile.index');
+
 
 
     
