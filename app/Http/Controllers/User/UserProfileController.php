@@ -1,93 +1,51 @@
 <?php
 
-
-
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\Controller; // Ini harus ada
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User; // Pastikan model User sudah ada
-use App\Models\Notification; // Pastikan model Notification sudah ada
-use App\Models\Event; // Pastikan model Event sudah ada
-use App\Models\Ticket; // Pastikan model Ticket sudah ada
-use App\Models\Order; // Pastikan model Order sudah ada
+use Illuminate\Support\Facades\Hash;
 
-
-class UserProfileController extends Controller
-
+class UserProfileController extends Controller // Pastikan mewarisi Controller yang benar
 {
-    /**
-     * Menampilkan halaman profil pengguna.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function index()
+    // Menampilkan profil pengguna
+    public function show()
     {
-        // Ambil data pengguna yang sedang login
-        $user = Auth::user();
-        return view('user.profile.index', compact('user'));
+        $user = Auth::user(); // Ambil data user yang sedang login
+        return view('user.profile', compact('user'));
     }
 
-    /**
-     * Menampilkan halaman edit profil pengguna.
-     *
-     * @return \Illuminate\View\View
-     */
+    // Menampilkan form edit profil
     public function edit()
     {
-        // Ambil data pengguna yang sedang login
         $user = Auth::user();
-        return view('user.profile.edit', compact('user'));
+        return view('user.edit-profile', compact('user'));
     }
 
-    /**
-     * Memproses pembaruan profil pengguna.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\RedirectResponse
-     */
+    // Memproses update data profil
     public function update(Request $request)
     {
-        // Validasi inputan
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
-            'phone' => 'nullable|string|max:20',
-            // Tambahkan validasi lain sesuai kebutuhan
-        ]);
-
-        // Ambil pengguna yang sedang login
         $user = Auth::user();
 
-        // Update data pengguna
-        $user->update($request->only(['name', 'email', 'phone']));
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'password' => 'nullable|string|min:6|confirmed',
+        ]);
 
-        // Redirect ke halaman profil dengan pesan sukses
-        return redirect()->route('user.profile.index')->with('success', 'Profil berhasil diperbarui.');
-    }
+        // Update data
+        $user->name = $request->name;
+        $user->email = $request->email;
 
-    /**
-     * Menampilkan riwayat pembelian tiket pengguna.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function purchaseHistory()
-    {
-        // Ambil riwayat pesanan pengguna
-        $orders = Auth::user()->orders()->with('event')->latest()->get();  // Pastikan ada relasi 'orders' di model User
-        return view('user.profile.history', compact('orders'));
-    }
+        // Jika ada password baru
+        if ($request->filled('password')) {
+            $user->password = Hash::make($request->password);
+        }
 
-    /**
-     * Menampilkan halaman detail notifikasi untuk pengguna.
-     *
-     * @return \Illuminate\View\View
-     */
-    public function notifications()
-    {
-        // Ambil notifikasi terbaru untuk pengguna
-        $notifications = Auth::user()->notifications()->latest()->paginate(10);
-        return view('user.notifications.index', compact('notifications'));
+        $user->save();
+
+        return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
     }
 }

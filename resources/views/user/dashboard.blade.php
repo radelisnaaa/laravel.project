@@ -43,7 +43,7 @@
         }
 
         .event-card {
-            background-color: #f9fbe7;
+            background-color: #e3f2fd; /* Warna latar belakang kartu event */
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
             padding: 20px;
@@ -79,8 +79,8 @@
         }
 
         .btn-outline-secondary-dash {
-            border-color: #78909c;
-            color: #78909c;
+            border-color: #6c757d; /* Warna abu-abu untuk tombol sekunder */
+            color: #6c757d; /* Warna teks abu-abu untuk tombol sekunder */
             border-radius: 8px;
             padding: 8px 12px;
             text-decoration: none;
@@ -88,8 +88,8 @@
         }
 
         .btn-outline-secondary-dash:hover {
-            border-color: #546e7a;
-            color: #546e7a;
+            border-color: #495057;
+            color: #495057;
         }
 
         .notification-item {
@@ -109,8 +109,13 @@
             margin-bottom: 8px;
         }
 
+        .profile-actions {
+            display: grid; /* Menggunakan grid layout untuk tombol profil */
+            gap: 8px; /* Jarak antar tombol profil */
+        }
+
         .profile-actions a {
-            margin-right: 10px;
+            margin-right: 0; /* Menghilangkan margin kanan default pada tombol profil */
         }
 
         .calendar-container {
@@ -127,32 +132,95 @@
 </head>
 <body>
 <div class="container">
-    <h1 class="dashboard-title"><i class="fas fa-tachometer-alt me-2"></i> Dashboard Pengguna</h1>
+   
+
+< <a href="{{ route('home') }}" class="btn btn-primary mb-3">
+
+        <i class="fas fa-home me-2"></i> Kembali ke Halaman Utama
+
+    </a>
+    <div class="greeting-section">
+        <h1 class="dashboard-title"><i class="fas fa-user-circle me-2"></i> Halo, {{ Auth::user()->name }}!</h1>
+        <p class="dashboard-subtitle">Selamat datang kembali di dashboard Anda. Mari kelola dan ikuti event menarik!</p>
+    </div>
+</div>
+
+<style>
+    .dashboard-header {
+        background-color: #e3f2fd; /* Latar belakang header */
+        padding: 30px;
+        border-radius: 12px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: space-between; /* Ruang antara tombol kembali dan sapaan */
+    }
+
+    .back-button {
+        background-color: transparent;
+        border-color: #78909c;
+        color: #78909c;
+        border-radius: 8px;
+        padding: 10px 15px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .back-button:hover {
+        background-color: #bbdefb;
+        color: #546e7a;
+        border-color: #546e7a;
+    }
+
+    .greeting-section {
+        text-align: right; /* Pindahkan sapaan ke kanan */
+    }
+
+    .dashboard-title {
+        color: #1e88e5;
+        margin-bottom: 5px;
+        font-size: 2.2em;
+        font-weight: bold;
+    }
+
+    .dashboard-subtitle {
+        color: #555;
+        font-size: 1.1em;
+        margin-bottom: 0;
+    }
+</style>
+
+
+    <!-- Konten lainnya... -->
+</div>
+
 
     <div class="row">
         <div class="col-md-8">
             <section>
-                <h2 class="section-title"><i class="fas fa-calendar-check me-2"></i> Event Saya</h2>
-                @if ($myEvents->isNotEmpty())
-                    @foreach ($myEvents as $event)
-                        <div class="event-card">
-                            <h5>{{ $event->name }}</h5>
-                            {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
+            <h2 class="section-title"><i class="fas fa-calendar-check me-2"></i> Event Saya</h2>
+@if ($myEvents->isNotEmpty())
+    @foreach ($myEvents as $event)
+        <div class="event-card">
+            <h5>{{ $event->name }}</h5>
+            {{ \Carbon\Carbon::parse($event->date)->format('d M Y') }}
 
-                            <p><i class="fas fa-tag me-1"></i> Tiket: {{ $event->ticketType }}</p>
-                            <p><i class="fas fa-info-circle me-1"></i> Status: {{ $event->status }}</p>
-                            <a href="{{ route('user.events.show', $event->id) }}" class="btn btn-sm btn-outline-secondary-dash"><i class="fas fa-eye me-1"></i> Detail</a>
-                            @if ($event->isOngoing())
-                                <a href="{{ $event->zoom_link }}" class="btn btn-sm btn-success ms-2" target="_blank"><i class="fas fa-video me-1"></i> Gabung Sekarang</a>
-                            @endif
-                            @if ($event->isFinished())
-                                <button class="btn btn-sm btn-secondary ms-2" disabled><i class="fas fa-check-circle me-1"></i> Selesai</button>
-                            @endif
-                        </div>
-                    @endforeach
-                @else
-                    <p>Anda belum mengikuti event apapun.</p>
-                @endif
+            <p><i class="fas fa-tag me-1"></i> Tiket: {{ $event->ticketType }}</p>
+            <p><i class="fas fa-info-circle me-1"></i> Status: {{ $event->status }}</p>
+            <a href="{{ route('user.events.show', $event->id) }}" class="btn btn-sm btn-outline-secondary-dash"><i class="fas fa-eye me-1"></i> Detail</a>
+            @if ($event->isOngoing())
+                <a href="{{ $event->zoom_link }}" class="btn btn-sm btn-success ms-2" target="_blank"><i class="fas fa-video me-1"></i> Gabung Sekarang</a>
+            @endif
+            @if ($event->isFinished())
+                <button class="btn btn-sm btn-secondary ms-2" disabled><i class="fas fa-check-circle me-1"></i> Selesai</button>
+            @endif
+        </div>
+    @endforeach
+@else
+    <p>Anda belum mengikuti event apapun.</p>
+@endif
+
             </section>
 
             <section class="mt-4">
@@ -178,17 +246,29 @@
         </div>
 
         <div class="col-md-4">
-            <section>
-                <h2 class="section-title"><i class="fas fa-user-circle me-2"></i> Akses Profil</h2>
-                <div class="card p-3">
-                    <p class="text-muted"><i class="fas fa-info-circle me-1"></i> Kelola informasi profil Anda di sini.</p>
-                    <div class="profile-actions mt-3">
-                        <a href="{{ route('user.profile.index') }}" class="btn btn-sm btn-primary-dash"><i class="fas fa-user me-1"></i> Lihat Profil</a>
-                        <a href="{{ route('user.profile.edit') }}" class="btn btn-sm btn-outline-secondary-dash"><i class="fas fa-edit me-1"></i> Edit Profil</a>
-                        <a href="{{ route('user.profile.history') }}" class="btn btn-sm btn-outline-secondary-dash"><i class="fas fa-history me-1"></i> Riwayat Pembelian</a>
-                    </div>
-                </div>
-            </section>
+        <section>
+    <h2 class="section-title"><i class="fas fa-user-circle me-2"></i> Akses Profil</h2>
+    <div class="card p-3">
+        <p class="text-muted"><i class="fas fa-info-circle me-1"></i> Kelola informasi profil Anda di sini.</p>
+        <div class="profile-actions mt-3">
+            <!-- Lihat Profil -->
+            <a href="{{ route('user.profile') }}" class="btn btn-sm btn-primary-dash">
+                <i class="fas fa-user me-1"></i> Lihat Profil
+            </a>
+            
+            <!-- Edit Profil -->
+            <a href="{{ route('user.profile.edit') }}" class="btn btn-sm btn-outline-secondary-dash">
+                <i class="fas fa-edit me-1"></i> Edit Profil
+            </a>
+            
+            <!-- Riwayat Pembelian -->
+            <a href="{{ route('user.profile.history') }}" class="btn btn-sm btn-outline-secondary-dash">
+                <i class="fas fa-history me-1"></i> Riwayat Pembelian
+            </a>
+        </div>
+    </div>
+</section>
+
 
             <section class="mt-4">
                 <h2 class="section-title"><i class="fas fa-bell me-2"></i> Notifikasi</h2>

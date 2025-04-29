@@ -175,11 +175,12 @@
                                 <span class="badge bg-info">Order ID: {{ $user->pivot->order_id }}</span>
                             </li>
                         @endforeach
-                    </ul>
-
                     <div class="d-grid gap-2 mt-3">
                         <a href="{{ route('events.index') }}" class="btn btn-secondary">
                             <i class="fas fa-arrow-left"></i> KEMBALI
+                        </a>
+                        <a href="{{ route('user.dashboard') }}" class="btn btn-outline-primary">
+                            <i class="fas fa-home"></i> KEMBALI KE DASHBOARD SAYA
                         </a>
                     </div>
                 </div>
@@ -190,9 +191,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
-
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
