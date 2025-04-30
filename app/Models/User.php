@@ -44,6 +44,11 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Event::class, 'event_user')->withPivot('order_id');
     }
+    
+    public function history()
+    {
+        return $this->hasMany(History::class);
+    }
 }
 
 

@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 
 class UserProfileController extends Controller // Pastikan mewarisi Controller yang benar
 {
+    
     // Menampilkan profil pengguna
     public function show()
     {
@@ -48,4 +49,13 @@ class UserProfileController extends Controller // Pastikan mewarisi Controller y
 
         return redirect()->route('user.profile')->with('success', 'Profil berhasil diperbarui.');
     }
+
+    public function history()
+    {
+        // Kamu bisa ambil data pesanan user dari database, contoh:
+        $orders = auth()->user()->orders; // Pastikan relasi 'orders' ada di model User
+
+        return view('user.history', compact('orders'));
+    }
 }
+

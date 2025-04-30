@@ -7,17 +7,24 @@ use App\Http\Controllers\EventUserController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+//admin 
+
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\EventController as AdminEventController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\TicketController as AdminTicketController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\EventUserController as AdminEventUserController;
+//user
+
+use App\Http\Controllers\User\UserDashboardController;
+//use App\Http\Controllers\User\UserEventController;
 use App\Http\Controllers\User\UserEventManagementController;
 use App\Http\Controllers\User\UserProfileController;
 
+
 use App\Http\Controllers\PublicEventController;
-use App\Http\Controllers\User\DashboardController;
+// use App\Http\Controllers\User\UserDashboardController;
 use App\Models\Event;
 
 /*
@@ -55,7 +62,6 @@ Route::middleware(['auth'])->group(function () {
 
     // Pesanan user
     Route::resource('orders', OrderController::class)->only(['index', 'show', 'store']);
-});
 
 /*
 |--------------------------------------------------------------------------
@@ -73,19 +79,36 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::resource('tickets', AdminTicketController::class);
 });
 
-Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->controller(DashboardController::class)->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(function () {
     // Route untuk halaman dashboard user
-    Route::get('/dashboard', 'index')->name('dashboard');
-    Route::get('/events', [UserEventManagementController::class, 'index'])->name('events.index');
-    Route::get('/events/{id}', [UserEventManagementController::class, 'show'])->name('events.show');
-    Route::get('profile', [UserProfileController::class, 'show'])->name('profile.index');
-    Route::get('profile', [UserProfileController::class, 'show'])->name('profile');
-    Route::get('profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
-    Route::put('profile', [UserProfileController::class, 'update'])->name('profile.update');
-    Route::get('profile/history', [UserProfileController::class, 'history'])->name('profile.history');
+    Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/notifications', 'notifications')->name('notifications.index');
+    // Route untuk event user
+    Route::get('/events', [UserEventManagementController::class, 'index'])->name('events');
+    Route::get('/event/{id}', [UserEventManagementController::class, 'show'])->name('events.detail');
+    Route::get('/events/{id}', [UserEventManagementController::class, 'show'])->name('events.show');
+
+    // Route untuk manage event (admin atau pengguna yang mengelola event)
+    Route::get('/manage-events', [UserEventManagementController::class, 'index'])->name('manage-events.index');
+    Route::get('/manage-events/{id}', [UserEventManagementController::class, 'show'])->name('manage-events.show');
+
+    
+        Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+        Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
+        Route::get('/profile/history', [UserProfileController::class, 'history'])->name('profile.history');
+    });
+    
+
+    Route::get('/orders', [
+        OrderController::class, 'index'])->name('orders');
+
+    
+
+
+    // Route untuk notifikasi
+    Route::get('/notifications', [UserDashboardController::class, 'notifications'])->name('notifications.index');
 });
+
 
 
 
