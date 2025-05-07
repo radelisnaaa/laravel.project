@@ -1,62 +1,69 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Detail Event</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>
-<body style="background-color: #e0f7fa; padding: 30px;">
-<div class="container bg-white p-4 rounded shadow">
-    <div class="mb-4">
-        <a href="{{ route('user.events.index') }}" class="btn btn-outline-secondary mb-2">
-            <i class="fas fa-arrow-left me-1"></i> Kembali ke Event Saya
-        </a>
-        <a href="{{ route('user.dashboard') }}" class="btn btn-outline-primary mb-2">
-            <i class="fas fa-home me-1"></i> Kembali ke Dashboard
-        </a>
-    </div>
+@extends('layouts.admin-app')
 
-    <div class="event-card">
-        <h3 class="text-primary mb-3"><i class="fas fa-calendar-day me-2"></i>{{ $event->title }}</h3>
+@section('title', 'Detail Event')
+@section('title-content', 'Detail Event')
 
-        <p><i class="fas fa-clock me-1"></i> Tanggal: {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</p>
+@section('content')
+    <div class="container-fluid">
+        <div class="mb-4">
+            <a href="{{ route('admin.events.index') }}" class="btn btn-outline-secondary mb-2">
+                <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar Event
+            </a>
+        </div>
 
-        @if ($event->speaker)
-            <p><i class="fas fa-user-tie me-1"></i> Pembicara: {{ $event->speaker }}</p>
-        @endif
+        <div class="event-card">
+            <h3 class="text-primary mb-3"><i class="fas fa-calendar-day me-2"></i>{{ $event->title }}</h3>
 
-        @if ($event->tickets->count())
-            <p><i class="fas fa-ticket-alt me-1"></i> Jenis Tiket: {{ $event->tickets->pluck('name')->implode(', ') }}</p>
-        @endif
+            <p><i class="fas fa-clock me-1"></i> Tanggal: {{ \Carbon\Carbon::parse($event->date)->format('d F Y') }}</p>
 
-        <p class="mt-3">{{ $event->description }}</p>
+            @if ($event->speaker)
+                <p><i class="fas fa-user-tie me-1"></i> Pembicara: {{ $event->speaker }}</p>
+            @endif
 
-        @if ($event->isOngoing())
+            @if ($event->tickets->count())
+                <p><i class="fas fa-ticket-alt me-1"></i> Jenis Tiket: {{ $event->tickets->pluck('name')->implode(', ') }}</p>
+            @endif
+
+            <p class="mt-3">{{ $event->description }}</p>
+
+            @if ($event->zoom_link)
+                <div class="mt-4">
+                    <a href="{{ $event->zoom_link }}" target="_blank" class="btn btn-success">
+                        <i class="fas fa-video me-1"></i> Gabung Zoom
+                    </a>
+                </div>
+            @endif
+
             <div class="mt-4">
-                <a href="{{ $event->zoom_link }}" target="_blank" class="btn btn-success">
-                    <i class="fas fa-video me-1"></i> Gabung Zoom
-                </a>
+                <div class="row">
+                    <div class="col-md-6">
+                        @if ($isJoined)
+                            <div class="alert alert-success">
+                                <i class="fas fa-check-circle me-1"></i> Anda sudah terdaftar pada event ini.
+                            </div>
+                        @else
+                            <form action="{{ route('admin.events.join', $event->id) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="btn btn-warning">
+                                    <i class="fas fa-ticket-alt me-1"></i> Daftar Sekarang
+                                </button>
+                            </form>
+                        @endif
+                    </div>
+                    <div class="col-md-6 text-end">
+                        <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-primary">
+                            <i class="fas fa-edit me-1"></i> Edit Event
+                        </a>
+                        <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-inline">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger ms-2" onclick="return confirm('Apakah Anda yakin ingin menghapus event ini?')">
+                                <i class="fas fa-trash-alt me-1"></i> Hapus
+                            </button>
+                        </form>
+                    </div>
+                </div>
             </div>
-        @elseif ($event->isFinished())
-            <div class="alert alert-secondary mt-3">
-                <i class="fas fa-check-circle me-1"></i> Event ini telah selesai.
-            </div>
-        @endif
-
-        @if ($isJoined)
-            <div class="mt-4 text-success">
-                <i class="fas fa-check-circle me-1"></i> Anda sudah mendaftar pada event ini.
-            </div>
-        @else
-            <div class="mt-4">
-                <a href="#" class="btn btn-warning">
-                    <i class="fas fa-ticket-alt me-1"></i> Daftar Sekarang
-                </a>
-            </div>
-        @endif
+        </div>
     </div>
-</div>
-</body>
-</html>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+@endsection

@@ -95,6 +95,7 @@ Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(fu
     
         Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
         Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
         Route::get('/profile/history', [UserProfileController::class, 'history'])->name('profile.history');
     });
     

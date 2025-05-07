@@ -1,128 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.user-app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Edit Profil</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: #333;
-            background-color: #f8f9fa;
-        }
+@section('title', 'Edit Profil')
 
-        .navbar {
-            background-color: #e3f2fd;
-        }
-
-        .navbar-light .navbar-nav .nav-link {
-            color: #0d6efd;
-        }
-
-        .navbar-light .navbar-nav .nav-link:hover,
-        .navbar-light .navbar-nav .nav-link.active {
-            color: #0b5ed7;
-        }
-
-        .container {
-            max-width: 800px;
-            margin-top: 50px;
-        }
-
-        .card {
-            border: 1px solid #e0f7fa;
-            padding: 20px;
-        }
-
-        .btn-primary {
-            background-color: #0d6efd;
-            border-color: #0d6efd;
-        }
-
-        .btn-primary:hover {
-            background-color: #0b5ed7;
-            border-color: #0b5ed7;
-        }
-    </style>
-</head>
-
-<body>
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light">
-            <div class="container">
-                <a class="navbar-brand" href="#">Logo Event Anda</a>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('profile.index') }}">Profil</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('user.dashboard') }}">Dashboard</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <main>
-        <div class="container">
-            <div class="card">
-                <h3 class="card-title mb-4">Edit Profil</h3>
-
-                @if (session('success'))
-                    <div class="alert alert-success">
-                        {{ session('success') }}
-                    </div>
-                @endif
-
-                <form action="{{ route('user.profile.update') }}" method="POST">
-                    @csrf
-                    @method('PUT')
-
-                    <!-- ... input fields ... -->
-
-                    <div class="d-flex justify-content-between mt-4">
-                        <a href="{{ route('user.dashboard') }}" class="btn btn-outline-secondary">
-                            <i class="fas fa-arrow-left me-1"></i> Kembali ke Dashboard
-                        </a>
-                        
-                    </div>
-                </form>
-
-                    <div class="mb-3">
-                        <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}">
-                        @error('email')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">Password Baru</label>
-                        <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">
-                        @error('password')
-                            <div class="invalid-feedback">{{ $message }}</div>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password_confirmation" class="form-label">Konfirmasi Password</label>
-                        <input type="password" class="form-control" id="password_confirmation" name="password_confirmation">
-                    </div>
-
-                    <button type="submit" class="btn btn-primary">Perbarui Profil</button>
-                </form>
-            </div>
+@section('content')
+<div class="container mt-4" style="max-width: 600px;">
+    <h2 class="mb-3" style="font-size: 1.75rem;">Edit Profil</h2>
+    <div class="card shadow-sm">
+        <div class="card-header bg-primary text-white py-2">
+            <h6 class="mb-0"><i class="fas fa-user-edit me-2"></i> Edit Informasi Profil</h6>
         </div>
-    </main>
+        <div class="card-body py-3">
+            @if (session('success'))
+                <div class="alert alert-success py-2 mb-3">
+                    <small><i class="fas fa-check-circle me-1"></i> {{ session('success') }}</small>
+                </div>
+            @endif
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
+            <form action="{{ route('user.profile.update') }}" method="POST">
+                @csrf
+                @method('PUT')
 
-</html>
+                <div class="mb-2">
+                    <label for="name" class="form-label"><small>Nama</small></label>
+                    <input type="text" class="form-control form-control-sm @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $user->name) }}" required>
+                    @error('name')
+                        <div class="invalid-feedback"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+
+                <div class="mb-2">
+                    <label for="email" class="form-label"><small>Email</small></label>
+                    <input type="email" class="form-control form-control-sm @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email', $user->email) }}" required>
+                    @error('email')
+                        <div class="invalid-feedback"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+
+                <div class="mb-2">
+                    <label for="password" class="form-label"><small>Password Baru <span class="text-muted">(Biarkan kosong jika tidak ingin diubah)</span></small></label>
+                    <input type="password" class="form-control form-control-sm @error('password') is-invalid @enderror" id="password" name="password">
+                    @error('password')
+                        <div class="invalid-feedback"><small>{{ $message }}</small></div>
+                    @enderror
+                </div>
+
+                <div class="mb-3">
+                    <label for="password_confirmation" class="form-label"><small>Konfirmasi Password</small></label>
+                    <input type="password" class="form-control form-control-sm" id="password_confirmation" name="password_confirmation">
+                </div>
+
+                <div class="d-flex justify-content-between mt-3">
+                    <a href="{{ route('user.profile') }}" class="btn btn-sm btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> <small>Kembali</small>
+                    </a>
+                    <button type="submit" class="btn btn-sm btn-primary">
+                        <i class="fas fa-save me-1"></i> <small>Perbarui</small>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+@endsection
