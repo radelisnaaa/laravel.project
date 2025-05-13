@@ -1,39 +1,43 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Acara</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-        .container {
-            max-width: 600px;
-        }
-        .card {
-            border-radius: 15px;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.admin-app')
 
+@section('title', 'Detail Order')
 
-<div class="container mt-5">
-    <div class="card">
-        <div class="card-body">
-            <h2 class="card-title">Detail Order #{{ $order->id }}</h2>
-            <p class="card-text"><strong>Event:</strong> {{ $order->ticket->event->name }}</p>
-            <p class="card-text"><strong>Tiket:</strong> {{ $order->ticket->id }}</p>
-            <p class="card-text"><strong>Jumlah:</strong> {{ $order->quantity }}</p>
-            <p class="card-text"><strong>Total Harga:</strong> Rp{{ number_format($order->total_price) }}</p>
-            <p class="card-text"><strong>Tanggal Pembelian:</strong> {{ $order->created_at->format('d F Y') }}</p>
+@section('title-content')
+    Detail Order #{{ $order->id }}
+@endsection
 
-            <a href="{{ route('orders.index') }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left"></i> Kembali ke Daftar Tiket
-            </a>
+@section('content')
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Informasi Order</h6>
+                </div>
+                <div class="card-body">
+                    <p><strong>ID Order:</strong> {{ $order->id }}</p>
+                    <p><strong>Event:</strong> {{ $order->ticket->event->name }}</p>
+                    <p><strong>Tiket:</strong> {{ $order->ticket->name }} (ID: {{ $order->ticket->id }})</p>
+                    <p><strong>Pembeli:</strong> {{ $order->user->name }} (ID: {{ $order->user->id }})</p>
+                    <p><strong>Jumlah:</strong> {{ $order->quantity }}</p>
+                    <p><strong>Total Harga:</strong> Rp{{ number_format($order->total_price) }}</p>
+                    <p><strong>Tanggal Pembelian:</strong> {{ $order->created_at->format('d F Y, H:i:s') }}</p>
+
+                    <a href="{{ route('admin.orders.index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar Pesanan
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+@endsection
 
+@push('styles')
+    <style>
+        .card-header .font-weight-bold {
+            font-size: 1.1rem;
+        }
+        .card-body p strong {
+            font-weight: 500;
+        }
+    </style>
+@endpush

@@ -1,153 +1,126 @@
-<!DOCTYPE html>
-<html lang="id">
+@extends('layouts.admin-app')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Daftar Acara</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+@section('title', 'Daftar Acara')
+@section('title-content', 'Daftar Acara')
+
+@push('styles')
     <style>
-        body {
-            background-color: #e0f7fa; /* Soft light blue background */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #444;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin-top: 30px;
-        }
         .header-title {
-            color: #1e88e5; /* Vibrant blue header */
-            text-align: center;
-            margin-bottom: 30px;
+            color: var(--text-primary);
+            text-align: left;
+            margin-bottom: 15px; /* Kurangi margin bawah */
             font-weight: bold;
-            font-size: 2em;
-        }
-        .card {
-            border-radius: 15px;
-            background-color: #f5f5f5; /* Light gray card */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            font-size: 1.5em; /* Perkecil ukuran font lagi */
         }
         .add-button-container {
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* Kurangi margin bawah */
             text-align: right;
         }
         .btn-primary {
-            background-color: #1e88e5;
-            border-color: #1e88e5;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
+            background-color: var(--sidebar-bg);
+            border-color: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 6px 12px; /* Perkecil padding tombol */
+            border-radius: 4px; /* Perkecil border radius tombol */
             text-decoration: none;
             transition: background-color 0.3s ease;
+            font-size: 0.9em; /* Perkecil ukuran font tombol */
         }
         .btn-primary:hover {
-            background-color: #1565c0;
-            border-color: #1565c0;
-        }
-        .alert {
-            border-radius: 8px;
-            margin-bottom: 20px;
-            padding: 15px;
+            background-color: var(--sidebar-hover);
+            border-color: var(--sidebar-hover);
         }
         .alert-success {
-            background-color: #e8f5e9;
+            background-color: #c8e6c9;
             color: #1b5e20;
-            border: 1px solid #c8e6c9;
+            border: 1px solid #a5d6a7;
+            border-radius: 4px; /* Perkecil border radius alert */
+            padding: 8px; /* Perkecil padding alert */
+            margin-bottom: 15px; /* Kurangi margin bawah */
+            font-size: 0.9em; /* Perkecil ukuran font alert */
         }
-        .table-responsive {
-            overflow-x: auto;
+        .card {
+            border-radius: 6px; /* Perkecil border radius card */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05); /* Efek shadow lebih halus */
         }
-        .table {
-            width: 100%;
-            margin-bottom: 1rem;
-            color: #444;
-            border-collapse: collapse;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        .card-body {
+            padding: 1rem; /* Kurangi padding card body */
         }
-        .table th,
-        .table td {
-            padding: 12px 15px;
-            text-align: left;
-            vertical-align: middle;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .table thead th {
-            background-color: #1565c0;
+        .table-dark th {
+            background-color: var(--active-text);
             color: white;
-            font-weight: bold;
             text-align: center;
+            padding: 8px; /* Perkecil padding header tabel */
+            font-size: 0.9em; /* Perkecil ukuran font header tabel */
         }
-        .table tbody tr:nth-child(even) {
+        .table-striped tbody tr:nth-of-type(odd) {
             background-color: #f9f9f9;
         }
         .event-img {
-            width: 80px; /* Reduced size for better table fit */
-            height: 60px;
+            width: 40px; /* Perkecil ukuran gambar */
+            height: 30px; /* Perkecil ukuran gambar */
             object-fit: cover;
-            border-radius: 6px;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+            border-radius: 3px; /* Perkecil border radius gambar */
+            box-shadow: 0 0.5px 1px rgba(0, 0, 0, 0.1); /* Efek shadow lebih halus pada gambar */
         }
         .btn-sm {
-            padding: 6px 10px;
-            font-size: 0.9em;
-            border-radius: 6px;
-            text-decoration: none;
-            display: inline-block;
-            margin-right: 5px;
+            padding: 4px 8px; /* Perkecil padding tombol aksi */
+            font-size: 0.8em; /* Perkecil ukuran font tombol aksi */
+            border-radius: 4px; /* Perkecil border radius tombol aksi */
+            margin-right: 3px; /* Kurangi margin kanan tombol aksi */
         }
         .btn-info {
-            background-color: #1e88e5;
-            border-color: #1e88e5;
-            color: white;
+            background-color: var(--active-bg);
+            border-color: var(--active-bg);
+            color: var(--active-text);
         }
         .btn-info:hover {
-            background-color: #1565c0;
-            border-color: #1565c0;
+            background-color: #a7c0cd;
+            border-color: #a7c0cd;
         }
         .btn-danger {
-            background-color: #e53935;
-            border-color: #e53935;
+            background-color: #ef5350;
+            border-color: #ef5350;
             color: white;
         }
         .btn-danger:hover {
-            background-color: #c62828;
-            border-color: #c62828;
+            background-color: #d32f2f;
+            border-color: #d32f2f;
         }
         .back-link {
-            margin-top: 20px;
+            margin-top: 15px; /* Kurangi margin atas */
             text-align: center;
             display: block;
-            color: #1565c0;
+            color: var(--active-text);
             text-decoration: none;
             font-weight: bold;
             transition: color 0.3s ease;
+            font-size: 0.9em; /* Perkecil ukuran font link kembali */
         }
         .back-link:hover {
-            color: #1e88e5;
+            color: var(--sidebar-hover);
             text-decoration: underline;
         }
         .text-danger {
             color: #e53935 !important;
             text-align: center;
-            margin-top: 20px;
+            margin-top: 15px; /* Kurangi margin atas */
             font-weight: bold;
+            font-size: 0.9em; /* Perkecil ukuran font pesan error */
+        }
+        .table th, .table td {
+            padding: 8px 10px; /* Perkecil padding sel tabel */
+            font-size: 0.9em; /* Perkecil ukuran font sel tabel */
         }
     </style>
-</head>
+@endpush
 
-<body>
-
-    <div class="container mt-5">
+@section('content')
+    <div class="container-fluid">
         <h1 class="header-title"><i class="fas fa-calendar-alt me-2"></i> Daftar Acara</h1>
 
         @if (Auth::check() && Auth::user()->role === 'admin')
-            <div class="add-button-container">
+            <div class="add-button-container mb-3 text-end">
                 <a href="{{ route('admin.events.create') }}" class="btn btn-primary"><i class="fas fa-plus-circle me-2"></i> Tambah Acara Baru</a>
             </div>
 
@@ -157,55 +130,53 @@
                 </div>
             @endif
 
-            <div class="card shadow-lg p-4">
-                <div class="table-responsive">
-                    <table class="table table-striped table-bordered">
-                        <thead class="table-dark">
-                            <tr>
-                                <th>Nama Acara</th>
-                                <th>Pembicara</th>
-                                <th>Deskripsi</th>
-                                <th>Tanggal</th>
-                                <th>Gambar</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($events as $event)
+            <div class="card shadow-lg">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="table-dark">
                                 <tr>
-                                    <td>{{ $event->name }}</td>
-                                    <td>{{ $event->speaker }}</td>
-                                    <td>{{ Str::limit($event->description, 50) }}</td>
-                                    <td class="text-center">{{ $event->date }}</td>
-                                    <td class="text-center">
-                                        <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="event-img">
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="{{ route('admin.events.show', $event->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="fas fa-eye"></i></a>
-                                        <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></a>
-                                        <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus acara ini?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash-alt"></i></button>
-                                        </form>
-                                    </td>
+                                    <th>Nama Acara</th>
+                                    <th>Pembicara</th>
+                                    <th>Deskripsi</th>
+                                    <th class="text-center">Tanggal</th>
+                                    <th class="text-center">Gambar</th>
+                                    <th class="text-center">Aksi</th>
                                 </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                @foreach ($events as $event)
+                                    <tr>
+                                        <td>{{ $event->name }}</td>
+                                        <td>{{ $event->speaker }}</td>
+                                        <td>{{ Str::limit($event->description, 50) }}</td>
+                                        <td class="text-center">{{ $event->date }}</td>
+                                        <td class="text-center">
+                                            <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="event-img">
+                                        </td>
+                                        <td class="text-center">
+                                            <a href="{{ route('admin.events.show', $event->id) }}" class="btn btn-sm btn-info" title="Detail"><i class="fas fa-eye"></i></a>
+                                            <a href="{{ route('admin.events.edit', $event->id) }}" class="btn btn-sm btn-primary" title="Edit"><i class="fas fa-pencil-alt"></i></a>
+                                            <form action="{{ route('admin.events.destroy', $event->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus acara ini?')">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger" title="Hapus"><i class="fas fa-trash-alt"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
             <div class="mt-3 text-center">
-                <a href="{{ route('admin.events.index') }}" class="back-link"><i class="fas fa-arrow-left me-2"></i> Kembali ke Daftar Acara</a>
+                <a href="{{ route('admin.dashboard') }}" class="back-link"><i class="fas fa-arrow-left me-2"></i> Kembali ke Dashboard</a>
             </div>
 
         @else
             <p class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i> Anda tidak memiliki akses ke halaman ini.</p>
         @endif
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-
-</html>
+@endsection

@@ -73,6 +73,7 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'adminDashboard'])->name('dashboard');
 
+    Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::resource('events', AdminEventController::class);
     Route::resource('orders', AdminOrderController::class);
     Route::resource('users', AdminUserController::class);

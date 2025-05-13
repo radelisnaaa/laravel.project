@@ -1,119 +1,6 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Edit Acara</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    <style>
-        body {
-            background-color: #e0f7fa; /* Soft light blue background */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #444;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-        .container {
-            background-color: #fff; /* White container */
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
-        }
-        .header-title {
-            color: #1e88e5; /* Vibrant blue header */
-            text-align: center;
-            margin-bottom: 30px;
-            font-weight: bold;
-            font-size: 2em;
-        }
-        .card-form {
-            background-color: #f5f5f5; /* Light gray card */
-            border-radius: 10px;
-            padding: 30px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-        .form-label {
-            color: #333;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        .form-control {
-            border-radius: 8px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 15px;
-            font-size: 1em;
-        }
-        .form-control.is-invalid {
-            border-color: #e53935;
-        }
-        .invalid-feedback {
-            color: #e53935;
-            margin-top: 5px;
-            font-size: 0.9em;
-        }
-        .btn-primary {
-            background-color: #1e88e5;
-            border-color: #1e88e5;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 1em;
-            transition: background-color 0.3s ease;
-        }
-        .btn-primary:hover {
-            background-color: #1565c0;
-            border-color: #1565c0;
-        }
-        .btn-secondary {
-            background-color: #78909c;
-            border-color: #78909c;
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 1em;
-            text-decoration: none;
-            transition: background-color 0.3s ease;
-        }
-        .btn-secondary:hover {
-            background-color: #546e7a;
-            border-color: #546e7a;
-        }
-        .d-grid {
-            gap: 15px;
-        }
-        .mt-2 {
-            margin-top: 10px;
-        }
-        .back-link {
-            margin-top: 20px;
-            text-align: center;
-            display: block;
-            color: #1565c0;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s ease;
-        }
-        .back-link:hover {
-            color: #1e88e5;
-            text-decoration: underline;
-        }
-        .text-danger {
-            color: #e53935 !important;
-            text-align: center;
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
-</head>
-<body>
+@extends('layouts.admin-app')
+
+@section('content')
     <div class="container mt-5">
         <h1 class="header-title"><i class="fas fa-pencil-alt me-2"></i> Edit Acara</h1>
 
@@ -165,6 +52,22 @@
                             @error('date')
                                 <div class="invalid-feedback">{{ $message }}</div>
                             @enderror
+                        <div class="mb-3">
+                            <label for="zoom_link" class="form-label fw-bold">
+                                <i class="fas fa-video me-2"></i> Link Zoom
+                            </label>
+                            <input 
+                                type="url" 
+                                class="form-control @error('zoom_link') is-invalid @enderror" 
+                                id="zoom_link" 
+                                name="zoom_link" 
+                                value="{{ old('zoom_link', $event->zoom_link) }}" 
+                                placeholder="https://zoom.us/..." 
+                                required
+                            >
+                            @error('zoom_link')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="mb-3">
@@ -189,7 +92,100 @@
             <p class="text-danger"><i class="fas fa-exclamation-triangle me-2"></i> Anda tidak memiliki akses ke halaman ini.</p>
         @endif
     </div>
+@endsection
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+<style>
+    body {
+        background-color: #e0f7fa; /* Soft light blue background */
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #444;
+        margin: 0;
+        padding: 0; /* Remove body padding as container has its own */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+    }
+    .container {
+        background-color: #fff; /* White container */
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        padding: 30px;
+        max-width: 600px;
+        width: 100%;
+        margin-top: 20px; /* Add some top margin if needed */
+        margin-bottom: 20px; /* Add some bottom margin if needed */
+    }
+    .header-title {
+        color: #1e88e5; /* Vibrant blue header */
+        text-align: center;
+        margin-bottom: 30px;
+        font-weight: bold;
+        font-size: 2em;
+    }
+    .card-form {
+        background-color: #f5f5f5; /* Light gray card */
+        border-radius: 10px;
+        padding: 30px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    .form-label {
+        color: #333;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 15px;
+        font-size: 1em;
+    }
+    .form-control.is-invalid {
+        border-color: #e53935;
+    }
+    .invalid-feedback {
+        color: #e53935;
+        margin-top: 5px;
+        font-size: 0.9em;
+    }
+    .btn-primary {
+        background-color: #1e88e5;
+        border-color: #1e88e5;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 1em;
+        transition: background-color 0.3s ease;
+    }
+    .btn-primary:hover {
+        background-color: #1565c0;
+        border-color: #1565c0;
+    }
+    .btn-secondary {
+        background-color: #78909c;
+        border-color: #78909c;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 8px;
+        font-size: 1em;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+    .btn-secondary:hover {
+        background-color: #546e7a;
+        border-color: #546e7a;
+    }
+    .d-grid {
+        gap: 15px;
+    }
+    .mt-2 {
+        margin-top: 10px;
+    }
+    .text-danger {
+        color: #e53935 !important;
+        text-align: center;
+        margin-top: 20px;
+        font-weight: bold;
+    }
+</style>
