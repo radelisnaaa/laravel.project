@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Event;
 
 class HomeController extends Controller
 {
     public function index()
     {
-        // Ambil data event dari database (sesuaikan model dan kolom yang digunakan)
-        $events = Event::all();
+        $user = Auth::user(); // Ambil user yang sedang login
+        $events = Event::latest()->take(6)->get(); // Ambil data event (ubah sesuai kebutuhan)
 
-        // Kirim data events ke view home
-        return view('home', compact('events'));
+        return view('home', compact('user', 'events'));
     }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\EventUserController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\HomeController;
 //admin 
 
 use App\Http\Controllers\Admin\AdminController;
@@ -15,6 +16,7 @@ use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\TicketController as AdminTicketController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\EventUserController as AdminEventUserController;
+use App\Http\Controllers\Admin\AdminProfileController as AdminProfileController;
 //user
 
 use App\Http\Controllers\User\UserDashboardController;
@@ -33,11 +35,7 @@ use App\Models\Event;
 |--------------------------------------------------------------------------
 | Bisa diakses oleh semua orang, termasuk tamu.
 */
-Route::get('/', function () {
-    $events = Event::all();
-    return view('home', compact('events'));
-})->name('home');
-
+Route::get('/', [HomeController::class, 'index'])->name('home');
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');
@@ -72,6 +70,10 @@ Route::middleware(['auth'])->group(function () {
 
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'adminDashboard'])->name('dashboard');
+    Route::get('/profile', [AdminProfileController::class, 'edit'])->name('profile'); // Ini route('admin.profile')
+    Route::put('/profile/update', [AdminProfileController::class, 'update'])->name('profile.update');;
+    Route::put('/profile', [AdminProfileController::class, 'edit'])->name('profile-edit');
+    Route::get('/profile/show', [AdminProfileController::class, 'show'])->name('profile.show');
 
     Route::get('/orders', [AdminOrderController::class, 'index'])->name('orders.index');
     Route::resource('events', AdminEventController::class);
@@ -83,6 +85,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(function () {
     // Route untuk halaman dashboard user
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
+     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
 
     // Route untuk event user
     Route::get('/events', [UserEventManagementController::class, 'index'])->name('events');
