@@ -36,6 +36,7 @@ use App\Models\Event;
 | Bisa diakses oleh semua orang, termasuk tamu.
 */
 Route::get('/', [HomeController::class, 'index'])->name('home');
+
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
 // })->middleware(['auth'])->name('dashboard');

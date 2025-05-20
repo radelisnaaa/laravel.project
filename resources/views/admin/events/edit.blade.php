@@ -23,13 +23,20 @@
 
                 <div class="card shadow-lg">
                     <div class="card-body">
-                        <form action="{{ route('admin.events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
+                        <form action="{{ route('admin.events.update', $event->id) }}" method="POST" enctype="multipart/form-data" autocomplete="off">
                             @csrf
                             @method('PUT')
 
                             <div class="mb-3">
                                 <label for="name" class="form-label fw-bold"><i class="fas fa-signature me-2"></i> Nama Acara</label>
-                                <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" value="{{ old('name', $event->name) }}" placeholder="Masukkan Nama Acara" required>
+                                <input type="text" 
+                                       class="form-control @error('name') is-invalid @enderror" 
+                                       id="name" 
+                                       name="name" 
+                                       value="{{ old('name', $event->name) }}" 
+                                       placeholder="Masukkan Nama Acara" 
+                                       required 
+                                       autocomplete="off">
                                 @error('name')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -37,7 +44,14 @@
 
                             <div class="mb-3">
                                 <label for="speaker" class="form-label fw-bold"><i class="fas fa-microphone me-2"></i> Pembicara</label>
-                                <input type="text" class="form-control @error('speaker') is-invalid @enderror" id="speaker" name="speaker" value="{{ old('speaker', $event->speaker) }}" placeholder="Masukkan Pembicara" required>
+                                <input type="text" 
+                                       class="form-control @error('speaker') is-invalid @enderror" 
+                                       id="speaker" 
+                                       name="speaker" 
+                                       value="{{ old('speaker', $event->speaker) }}" 
+                                       placeholder="Masukkan Pembicara" 
+                                       required
+                                       autocomplete="off">
                                 @error('speaker')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -45,7 +59,12 @@
 
                             <div class="mb-3">
                                 <label for="description" class="form-label fw-bold"><i class="fas fa-file-alt me-2"></i> Deskripsi Acara</label>
-                                <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" placeholder="Masukkan Deskripsi Acara" rows="3" required>{{ old('description', $event->description) }}</textarea>
+                                <textarea class="form-control @error('description') is-invalid @enderror" 
+                                          id="description" 
+                                          name="description" 
+                                          placeholder="Masukkan Deskripsi Acara" 
+                                          rows="3" 
+                                          required>{{ old('description', $event->description) }}</textarea>
                                 @error('description')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
@@ -53,11 +72,17 @@
 
                             <div class="mb-3">
                                 <label for="date" class="form-label fw-bold"><i class="fas fa-calendar-alt me-2"></i> Tanggal Acara</label>
-                                <input type="date" class="form-control @error('date') is-invalid @enderror" id="date" name="date" value="{{ old('date', $event->date) }}" required>
+                                <input type="date" 
+                                       class="form-control @error('date') is-invalid @enderror" 
+                                       id="date" 
+                                       name="date" 
+                                       value="{{ old('date', \Carbon\Carbon::parse($event->date)->format('Y-m-d')) }}" 
+                                       required>
                                 @error('date')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
+
                             <div class="mb-3">
                                 <label for="zoom_link" class="form-label fw-bold">
                                     <i class="fas fa-video me-2"></i> Link Zoom
@@ -78,13 +103,21 @@
 
                             <div class="mb-3">
                                 <label for="image" class="form-label fw-bold"><i class="fas fa-image me-2"></i> Gambar Acara</label>
-                                <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image">
+                                <input type="file" 
+                                       class="form-control @error('image') is-invalid @enderror" 
+                                       id="image" 
+                                       name="image"
+                                       accept="image/*"
+                                       onchange="previewImage(event)">
                                 @error('image')
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
+                                
                                 @if ($event->image)
-                                    <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" width="100" class="mt-2 rounded">
+                                    <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" width="100" class="mt-2 rounded" id="old-image">
                                 @endif
+
+                                <img id="preview" src="#" alt="Preview Gambar" style="display:none; max-width: 100px; margin-top: 10px;" class="rounded" />
                             </div>
 
                             <div class="d-grid gap-2 d-md-flex justify-content-md-start">
@@ -101,5 +134,29 @@
             @endif
         </div>
     </div>
-@endsection
 
+    <script>
+        function previewImage(event) {
+            const preview = document.getElementById('preview');
+            const oldImage = document.getElementById('old-image');
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    if (oldImage) {
+                        oldImage.style.display = 'none';
+                    }
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '';
+                preview.style.display = 'none';
+                if (oldImage) {
+                    oldImage.style.display = 'block';
+                }
+            }
+        }
+    </script>
+@endsection

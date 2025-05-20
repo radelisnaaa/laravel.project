@@ -24,30 +24,38 @@ class EventController extends Controller
     }
 
     public function store(Request $request): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'speaker' => 'required|string',
-            'zoom_link' => 'nullable|url',
-            'date' => 'required|date',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+{
+$request->validate([
+    'name' => 'required|string',
+    'description' => 'required|string',
+    'speaker' => 'required|string',
+    'zoom_link' => 'nullable|url',
+    'date' => 'required|date',
+    'start_time' => 'required|date_format:H:i',
+    'end_time' => 'required|date_format:H:i',
+    'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+]);
 
-        $imagePath = $request->file('image')->store('public/event');
+$startDateTime = $request->date . ' ' . $request->start_time;
+$endDateTime = $request->date . ' ' . $request->end_time;
 
-        Event::create([
-            'name' => $request->name,
-            'description' => $request->description,
-            'speaker' => $request->speaker,
-            'zoom_link' => $request->zoom_link,
-            'date' => $request->date,
-            'image' => str_replace('public/', '', $imagePath),
-            'user_id' => Auth::id(),
-        ]);
+$imagePath = $request->file('image')->store('public/event');
 
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil dibuat');
-    }
+Event::create([
+    'name' => $request->name,
+    'description' => $request->description,
+    'speaker' => $request->speaker,
+    'zoom_link' => $request->zoom_link,
+    'date' => $request->date,    
+    'start_time' => $startDateTime,
+    'end_time' => $endDateTime,
+    'image' => str_replace('public/', '', $imagePath),
+    'user_id' => Auth::id(),
+]);
+
+    return redirect()->route('admin.events.index')->with('success', 'Event berhasil dibuat');
+}
+
 
     public function show(Event $event): View
     {
@@ -60,32 +68,39 @@ class EventController extends Controller
     }
 
     public function update(Request $request, Event $event): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'speaker' => 'required|string',
-            'zoom_link' => 'nullable|url',
-            'date' => 'required|date',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+{
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'description' => 'required|string',
+        'speaker' => 'required|string',
+        'zoom_link' => 'nullable|url',
+        'date' => 'required|date',
+        'start_time' => 'required|date_format:H:i',
+        'end_time' => 'required|date_format:H:i',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    ]);
 
-        if ($request->hasFile('image')) {
-            Storage::delete('public/' . $event->image);
-            $imagePath = $request->file('image')->store('public/event');
-            $event->update(['image' => str_replace('public/', '', $imagePath)]);
-        }
+    // Gabungkan date + time
+    $startDateTime = $request->date . ' ' . $request->start_time;
+    $endDateTime = $request->date . ' ' . $request->end_time;
 
-        $event->update([
-            'name' => $request->name,
-            'description' => $request->description,
-            'speaker' => $request->speaker,
-            'zoom_link' => $request->zoom_link,
-            'date' => $request->date,
-        ]);
-
-        return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui');
+    if ($request->hasFile('image')) {
+        Storage::delete('public/' . $event->image);
+        $imagePath = $request->file('image')->store('public/event');
+        $event->update(['image' => str_replace('public/', '', $imagePath)]);
     }
+
+    $event->update([
+        'name' => $request->name,
+        'description' => $request->description,
+        'speaker' => $request->speaker,
+        'zoom_link' => $request->zoom_link,
+        'start_time' => $startDateTime,
+        'end_time' => $endDateTime,
+    ]);
+
+    return redirect()->route('admin.events.index')->with('success', 'Event berhasil diperbarui');
+}
 
     public function destroy(Event $event): RedirectResponse
     {

@@ -218,17 +218,20 @@
                     @foreach ($events as $event)
                         <div class="col-md-4 mb-4">
                             <div class="card">
-                                <img src="{{ Storage::url('images/' . $event->image) }}" class="card-img-top"
+                                <img src="{{ Storage::url('images/' . $event->image) }}" class="card-img-top" alt="{{ $event->name }}">
+
                                     alt="{{ $event->name }}">
                                 <div class="card-body">
                                     <h5 class="card-title">{{ $event->name }}</h5>
                                     <p class="card-text">{{ $event->description }}</p>
                                     <p class="card-text">
-                                        @if ($user->created_at)
-                                            {{ $user->created_at->format('d M Y') }}
+                                        @if ($user)
+                                            {{ $user->created_at }}
                                         @else
-                                            <em>Belum tersedia</em>
+                                            User tidak ditemukan.
                                         @endif
+                                    </p>
+
                                     </p>
                                     <p>
                                         <strong>Waktu:</strong>

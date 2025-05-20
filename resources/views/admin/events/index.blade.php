@@ -140,6 +140,8 @@
                                     <th>Pembicara</th>
                                     <th>Deskripsi</th>
                                     <th class="text-center">Tanggal</th>
+                                    <th>Waktu Mulai</th>
+                                    <th>Waktu Selesai</th>
                                     <th class="text-center">Gambar</th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
@@ -151,6 +153,8 @@
                                         <td>{{ $event->speaker }}</td>
                                         <td>{{ Str::limit($event->description, 50) }}</td>
                                         <td class="text-center">{{ $event->date }}</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($event->start_time)->format('H:i') }}</td>
+                                        <td class="text-center">{{ \Carbon\Carbon::parse($event->end_time)->format('H:i') }}</td>
                                         <td class="text-center">
                                             <img src="{{ asset('storage/' . $event->image) }}" alt="{{ $event->name }}" class="event-img">
                                         </td>

@@ -2,12 +2,12 @@
 
 @section('content')
     <div class="container">
-        <h1 class="admin-title"><i class="fas fa-plus-circle me-2"></i> Tambah Acara Baru</h1>
+        <h1 class="admin-title mb-4"><i class="fas fa-plus-circle me-2"></i> Tambah Acara Baru</h1>
 
         @if (Auth::check() && Auth::user()->role === 'admin')
             @if ($errors->any())
-                <div class="alert alert-danger-admin">
-                    <ul>
+                <div class="alert alert-danger">
+                    <ul class="mb-0">
                         @foreach ($errors->all() as $error)
                             <li>{{ $error }}</li>
                         @endforeach
@@ -15,215 +15,177 @@
                 </div>
             @endif
 
-            <div class="form-card">
-                <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-                    <input type="hidden" name="user_id" value="{{ Auth::id() }}">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form action="{{ route('admin.events.store') }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <input type="hidden" name="user_id" value="{{ Auth::id() }}">
 
-                    <div class="form-group">
-                        <input type="text" class="form-control-admin @error('name') is-invalid @enderror" id="name" name="name" placeholder="Nama Acara" value="{{ old('name') }}" required>
-                        <label for="name" class="form-label-admin"><i class="fas fa-signature me-1"></i> Nama Acara</label>
-                        @error('name')
-                            <div class="invalid-feedback-admin">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="mb-3">
+                            <label for="name" class="form-label"><i class="fas fa-signature me-1"></i> Nama Acara</label>
+                            <input type="text" class="form-control @error('name') is-invalid @enderror" id="name" name="name" placeholder="Masukkan nama acara" value="{{ old('name') }}" required>
+                            @error('name')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <textarea class="form-control-admin @error('description') is-invalid @enderror" id="description" name="description" placeholder="Deskripsi Acara" rows="3" required>{{ old('description') }}</textarea>
-                        <label for="description" class="form-label-admin"><i class="fas fa-file-alt me-1"></i> Deskripsi Acara</label>
-                        @error('description')
-                            <div class="invalid-feedback-admin">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="mb-3">
+                            <label for="description" class="form-label"><i class="fas fa-file-alt me-1"></i> Deskripsi Acara</label>
+                            <textarea class="form-control @error('description') is-invalid @enderror" id="description" name="description" rows="3" placeholder="Jelaskan detail acara" required>{{ old('description') }}</textarea>
+                            @error('description')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <input type="text" class="form-control-admin @error('speaker') is-invalid @enderror" id="speaker" name="speaker" placeholder="Pembicara" value="{{ old('speaker') }}" required>
-                        <label for="speaker" class="form-label-admin"><i class="fas fa-microphone me-1"></i> Pembicara</label>
-                        @error('speaker')
-                            <div class="invalid-feedback-admin">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="mb-3">
+                            <label for="speaker" class="form-label"><i class="fas fa-microphone me-1"></i> Pembicara</label>
+                            <input type="text" class="form-control @error('speaker') is-invalid @enderror" id="speaker" name="speaker" placeholder="Sebutkan nama pembicara" value="{{ old('speaker') }}" required>
+                            @error('speaker')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <input type="url" class="form-control-admin @error('zoom_link') is-invalid @enderror" id="zoom_link" name="zoom_link" placeholder="Link Zoom (opsional)" value="{{ old('zoom_link') }}">
-                        <label for="zoom_link" class="form-label-admin"><i class="fas fa-link me-1"></i> Link Zoom</label>
-                        @error('zoom_link')
-                            <div class="invalid-feedback-admin">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="mb-3">
+                            <label for="zoom_link" class="form-label"><i class="fas fa-link me-1"></i> Link Zoom (Opsional)</label>
+                            <input type="url" class="form-control @error('zoom_link') is-invalid @enderror" id="zoom_link" name="zoom_link" placeholder="Tempelkan link Zoom jika ada" value="{{ old('zoom_link') }}">
+                            @error('zoom_link')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                <label for="date" class="form-label">
+                                    <i class="fas fa-calendar-alt me-1"></i> Tanggal Acara
+                                </label>
+                                <input
+                                    type="date"
+                                    class="form-control @error('date') is-invalid @enderror"
+                                    id="date"
+                                    name="date"
+                                    value="{{ old('date', now()->format('Y-m-d')) }}"
+                                    required
+                                    autocomplete="off"
+                                >
+                                @error('date')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                            <div class="col-md-6">
+                                <label for="start_time" class="form-label">
+                                    <i class="fas fa-clock me-1"></i> Waktu Mulai
+                                </label>
+                                <input
+                                    type="time"
+                                    class="form-control @error('start_time') is-invalid @enderror"
+                                    id="start_time"
+                                    name="start_time"
+                                    value="{{ old('start_time') }}"
+                                    required
+                                    autocomplete="off"
+                                >
+                                @error('start_time')
+                                    <div class="invalid-feedback">{{ $message }}</div>
+                                @enderror
+                            </div>
+                        </div>
 
-                    <div class="form-group">
-                        <input type="date" class="form-control-admin @error('date') is-invalid @enderror" id="date" name="date" value="{{ old('date') ? old('date') : now()->format('Y-m-d') }}" placeholder="Tanggal Acara" required>
-                        <label for="date" class="form-label-admin"><i class="fas fa-calendar-alt me-1"></i> Tanggal Acara</label>
-                        @error('date')
-                            <div class="invalid-feedback-admin">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="mb-3">
+                            <label for="end_time" class="form-label">
+                                <i class="fas fa-clock me-1"></i> Waktu Selesai
+                            </label>
+                            <input
+                                type="time"
+                                class="form-control @error('end_time') is-invalid @enderror"
+                                id="end_time"
+                                name="end_time"
+                                value="{{ old('end_time') }}"
+                                required
+                                autocomplete="off"
+                            >
+                            @error('end_time')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="form-group">
-                        <input type="file" class="form-control-admin @error('image') is-invalid @enderror" id="image" name="image" placeholder="Gambar Acara" required>
-                        <label for="image" class="form-label-admin"><i class="fas fa-image me-1"></i> Gambar Acara</label>
-                        @error('image')
-                            <div class="invalid-feedback-admin">{{ $message }}</div>
-                        @enderror
-                    </div>
+                        <div class="mb-3">
+                            <label for="image" class="form-label"><i class="fas fa-image me-1"></i> Gambar Acara</label>
+                            <input type="file" class="form-control @error('image') is-invalid @enderror" id="image" name="image" required>
+                            @error('image')
+                                <div class="invalid-feedback">{{ $message }}</div>
+                            @enderror
+                        </div>
 
-                    <div class="d-grid gap-2">
-                        <button type="submit" class="btn btn-primary-admin"><i class="fas fa-save me-1"></i> SIMPAN</button>
-                        <a href="{{ route('admin.events.index') }}" class="btn btn-secondary-admin"><i class="fas fa-arrow-left me-1"></i> KEMBALI</a>
-                    </div>
-                </form>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary"><i class="fas fa-save me-1"></i> Simpan Acara</button>
+                            <a href="{{ route('admin.events.index') }}" class="btn btn-secondary"><i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar Acara</a>
+                        </div>
+                    </form>
+                </div>
             </div>
         @else
-            <p class="no-access-admin"><i class="fas fa-ban me-2"></i> Anda tidak memiliki akses ke halaman ini.</p>
+            <div class="alert alert-danger" role="alert">
+                <i class="fas fa-ban me-2"></i> Anda tidak memiliki akses ke halaman ini.
+            </div>
         @endif
     </div>
 
-    <script>
-        const formControls = document.querySelectorAll('.form-control-admin');
+    <style>
+        .admin-title {
+            color: #3490dc; /* Warna biru yang lebih menarik */
+        }
 
-        formControls.forEach(control => {
-            const label = control.nextElementSibling;
-            if (label && label.classList.contains('form-label-admin')) {
-                if (control.value) {
-                    label.classList.add('active');
-                }
+        .form-label {
+            font-weight: bold; /* Label lebih menonjol */
+            color: #495057; /* Warna teks label standar */
+        }
 
-                control.addEventListener('focus', () => {
-                    label.classList.add('active');
-                });
+        .form-control {
+            border-radius: 0.25rem; /* Sudut input yang lebih lembut */
+            border: 1px solid #ced4da; /* Warna border standar */
+        }
 
-                control.addEventListener('blur', () => {
-                    if (!control.value) {
-                        label.classList.remove('active');
-                    }
-                });
-            }
-        });
-    </script>
+        .form-control:focus {
+            border-color: #3490dc; /* Warna border saat fokus */
+            box-shadow: 0 0 0 0.2rem rgba(52, 144, 220, 0.25); /* Efek shadow saat fokus */
+        }
+
+        .invalid-feedback {
+            color: #e3342f; /* Warna teks error */
+            font-size: 0.875em;
+        }
+
+        .btn-primary {
+            background-color: #3490dc; /* Warna primer */
+            border-color: #3490dc;
+        }
+
+        .btn-primary:hover {
+            background-color: #2779bd; /* Warna primer saat hover */
+            border-color: #2779bd;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d; /* Warna sekunder */
+            border-color: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268; /* Warna sekunder saat hover */
+            border-color: #5a6268;
+        }
+
+        .card {
+            margin-top: 20px; /* Sedikit jarak dari judul */
+            border: none; /* Hilangkan border default card */
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Efek shadow pada card */
+            border-radius: 0.5rem; /* Sudut card yang lebih membulat */
+        }
+
+        .card-body {
+            padding: 2rem; /* Padding di dalam card */
+        }
+
+        .alert-danger {
+            border-radius: 0.25rem;
+        }
+    </style>
 @endsection
-
-<style>
-    .container {
-        background-color: #fff;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        padding: 30px;
-        max-width: 800px;
-        width: 100%;
-        margin-top: 20px; /* Optional: Adjust top margin as needed */
-        margin-bottom: 20px; /* Optional: Adjust bottom margin as needed */
-    }
-
-    .admin-title {
-        color: #1e88e5;
-        text-align: center;
-        margin-bottom: 30px;
-        font-weight: bold;
-        font-size: 2.5em;
-    }
-
-    .form-card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        padding: 25px;
-        margin-bottom: 20px;
-    }
-
-    .form-group {
-        position: relative;
-        margin-bottom: 25px;
-    }
-
-    .form-label-admin {
-        position: absolute;
-        top: 8px;
-        left: 10px;
-        font-size: 0.9em;
-        color: #777;
-        font-weight: normal;
-        pointer-events: none;
-        transition: all 0.2s ease-in-out;
-        background-color: white;
-        padding: 0 5px;
-    }
-
-    .form-control-admin {
-        border-radius: 4px;
-        border: 1px solid #ced4da;
-        padding: 12px;
-        display: block;
-        width: 100%;
-        font-size: 1em;
-        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-    }
-
-    .form-control-admin:focus {
-        border-color: #1e88e5;
-        outline: 0;
-        box-shadow: 0 0 0 0.2rem rgba(30, 136, 229, 0.25);
-    }
-
-    .form-control-admin::placeholder {
-        color: transparent;
-    }
-
-    .form-control-admin:not(:placeholder-shown) + .form-label-admin,
-    .form-control-admin:focus + .form-label-admin {
-        transform: translateY(-10px) translateX(-5px) scale(0.8);
-        color: #1e88e5;
-    }
-
-    .invalid-feedback-admin {
-        color: #dc3545;
-        font-size: 0.8em;
-        margin-top: 5px;
-    }
-
-    .btn-primary-admin {
-        background-color: #1e88e5;
-        border-color: #1e88e5;
-        color: white;
-        border-radius: 4px;
-        padding: 10px 20px;
-        font-size: 1em;
-        transition: background-color 0.15s ease-in-out;
-    }
-
-    .btn-primary-admin:hover {
-        background-color: #1565c0;
-        border-color: #1565c0;
-    }
-
-    .btn-secondary-admin {
-        background-color: #6c757d;
-        border-color: #6c757d;
-        color: white;
-        border-radius: 4px;
-        padding: 10px 20px;
-        font-size: 1em;
-        transition: background-color 0.15s ease-in-out;
-    }
-
-    .btn-secondary-admin:hover {
-        background-color: #545b62;
-        border-color: #4e555b;
-    }
-
-    .alert-danger-admin {
-        background-color: #f8d7da;
-        border-color: #f5c6cb;
-        color: #721c24;
-        border-radius: 4px;
-        padding: 15px;
-        margin-bottom: 20px;
-    }
-
-    .no-access-admin {
-        text-align: center;
-        margin-top: 20px;
-        color: #dc3545;
-        font-style: italic;
-    }
-</style>

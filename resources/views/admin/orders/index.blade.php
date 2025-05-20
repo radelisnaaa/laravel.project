@@ -10,7 +10,7 @@
                     <thead>
                         <tr>
                             <th>#ID</th>
-                            <th>Nama Tiket</th>
+                            <!-- <th>Nama Tiket</th> -->
                             <th>Nama Event</th>
                             <th>Pembeli</th>
                             <th>Jumlah</th>
@@ -23,7 +23,7 @@
                         @foreach ($orders as $order)
                             <tr>
                                 <td>{{ $order->id }}</td>
-                                <td>{{ $order->ticket->name }}</td>
+                                <!-- <td>{{ $order->ticket->name }}</td> -->
                                 <td>{{ $order->ticket->event->name }}</td>
                                 <td>{{ $order->user->name }}</td>
                                 <td>{{ $order->quantity }}</td>
@@ -49,7 +49,7 @@
                     <div class="col-md-4 mb-3">
                         <div class="card ticket-card">
                             <div class="card-body">
-                                <h5 class="card-title"><i class="fas fa-tag me-2"></i> {{ $ticket->name }}</h5>
+                                <!-- <h5 class="card-title"><i class="fas fa-tag me-2"></i> {{ $ticket->name }}</h5> -->
                                 <p class="card-text"><strong>Event:</strong> {{ $ticket->event->name }}</p>
                                 <p class="card-text"><strong>Harga:</strong> Rp{{ number_format($ticket->price) }}</p>
                                 <p class="card-text"><strong>Sisa Stok:</strong>
