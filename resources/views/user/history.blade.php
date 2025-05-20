@@ -13,7 +13,7 @@
     @else
         <ul class="list-group shadow-sm">
             @foreach($orders->sortByDesc('created_at') as $order)
-                <li class="list-group-item" style="cursor: pointer;" data-bs-toggle="collapse" data-bs-target="#orderDetails-{{ $order->id }}" aria-expanded="false" aria-controls="orderDetails-{{ $order->id }}">
+                <li class="list-group-item">
                     <div class="d-flex justify-content-between align-items-center">
                         <div>
                             <h6 class="mb-1">Pesanan #{{ $order->id }}</h6>
@@ -23,7 +23,10 @@
                             <span class="badge rounded-pill text-white bg-{{ $order->status === 'paid' ? 'success' : ($order->status === 'pending' ? 'warning' : 'danger') }}">
                                 <i class="fas fa-circle me-1"></i> {{ ucfirst($order->status) }}
                             </span>
-                            <i class="fas fa-chevron-down ms-2"></i>
+                            <!-- Tombol toggle untuk detail -->
+                            <button class="btn btn-sm btn-outline-primary ms-3" type="button" data-bs-toggle="collapse" data-bs-target="#orderDetails-{{ $order->id }}" aria-expanded="false" aria-controls="orderDetails-{{ $order->id }}">
+                                Detail
+                            </button>
                         </div>
                     </div>
                 </li>
@@ -35,6 +38,13 @@
                         <p class="card-text"><i class="fas fa-coins me-1"></i> Total Harga: Rp{{ number_format($order->total_price, 0, ',', '.') }}</p>
                         @if($order->updated_at && $order->created_at->ne($order->updated_at))
                             <p class="card-text small text-muted">Terakhir Diperbarui: {{ $order->updated_at->format('l, d F Y, H:i') }}</p>
+                        @endif
+
+                        {{-- Tombol bayar, muncul kalau statusnya pending --}}
+                        @if($order->status === 'pending')
+                            <a href="{{ route('user.orders.pay', $order->id) }}" class="btn btn-success mt-3">
+                                Bayar Sekarang
+                            </a>
                         @endif
                     </div>
                 </li>

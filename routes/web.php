@@ -23,6 +23,8 @@ use App\Http\Controllers\User\UserDashboardController;
 //use App\Http\Controllers\User\UserEventController;
 use App\Http\Controllers\User\UserEventManagementController;
 use App\Http\Controllers\User\UserProfileController;
+use App\Http\Controllers\User\UserOrderController;
+
 
 
 use App\Http\Controllers\PublicEventController;
@@ -43,7 +45,10 @@ Route::get('/', [HomeController::class, 'index'])->name('home');
 
 
 // Halaman detail event
-Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+//Route::get('/events/{id}', [EventController::class, 'show'])->name('events.show');
+
+
+
 
 // Login
 Route::post('/login', [UserController::class, 'login'])->name('user.login');
@@ -58,9 +63,11 @@ Route::middleware(['auth'])->group(function () {
     // Profil pengguna
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    // Route::get('/orders', [ProfileController::class, 'index'])->name('profile.index');
+    
 
     // Pesanan user
-    Route::resource('orders', OrderController::class)->only(['index', 'show', 'store']);
+    //Route::resource('orders', OrderController::class)->only(['index', 'show', 'store']);
 
 /*
 |--------------------------------------------------------------------------
@@ -102,11 +109,12 @@ Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(fu
         Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
         Route::get('/profile/history', [UserProfileController::class, 'history'])->name('profile.history');
+        Route::get('orders/{order}/pay', [UserOrderController::class, 'pay'])->name('orders.pay');  // << ini route untuk bayar
     });
     
 
-    Route::get('/orders', [
-        OrderController::class, 'index'])->name('orders');
+    //Route::get('/orders', [
+       // OrderController::class, 'index'])->name('orders');
 
     
 
