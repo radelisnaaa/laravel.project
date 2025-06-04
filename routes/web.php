@@ -63,6 +63,9 @@ Route::middleware(['auth'])->group(function () {
     // Profil pengguna
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile.index');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
     // Route::get('/orders', [ProfileController::class, 'index'])->name('profile.index');
     
 
@@ -108,7 +111,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(fu
         Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
         Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
         Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
-        Route::get('/profile/history', [UserProfileController::class, 'history'])->name('profile.history');
+        Route::resource('orders', UserOrderController::class);
+        //Route::get('/profile/history', [UserProfileController::class, 'history'])->name('profile.history');
         Route::get('orders/{order}/pay', [UserOrderController::class, 'pay'])->name('orders.pay');  // << ini route untuk bayar
     });
     

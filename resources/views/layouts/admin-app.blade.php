@@ -175,6 +175,17 @@
     .content-wrapper {
         transition: margin-left var(--transition-duration) ease-in-out;
     }
+    .hover-shadow:hover {
+        box-shadow: 0 0.75rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .transition {
+        transition: all 0.3s ease-in-out;
+    }
+
+    .transition-scale:hover {
+        transform: scale(1.2);
+    }
 }
 
 
@@ -293,6 +304,7 @@
         if (window.innerWidth >= 769) {
             closeSidebar();
         }
+        
     });
 </script>
 

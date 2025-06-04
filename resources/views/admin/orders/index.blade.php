@@ -27,7 +27,7 @@
                                 <td>{{ $order->ticket->event->name }}</td>
                                 <td>{{ $order->user->name }}</td>
                                 <td>{{ $order->quantity }}</td>
-                                <td>Rp{{ number_format($order->total_price) }}</td>
+                                <td>Rp{{ number_format($order->total_price * 1000, 0, ',', '.') }}</td>
                                 <td>{{ $order->created_at->format('d M Y, H:i') }}</td>
                                 <td>
                                     <a href="{{ route('admin.orders.show', $order->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-eye me-1"></i> Detail</a>

@@ -6,6 +6,10 @@
     <title>@yield('title', 'Dasbor Pengguna')</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- FullCalendar CSS & JS -->
+    <link href='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css' rel='stylesheet' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.js'></script>
+
     <style>
         /* Palet Warna yang Diselaraskan */
         :root {
@@ -19,6 +23,7 @@
             --text-primary: #444;
             --sidebar-width: 250px;
         }
+        
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -122,7 +127,12 @@
             }
             .toggle-sidebar-btn {
                 display: block; /* Tampilkan tombol toggle */
+            @media (min-width: 768px) {
+                .content {
+                    padding-top: 70px;
+                }
             }
+
         }
     </style>
 </head>
@@ -143,7 +153,7 @@
             <i class="fas fa-user me-2"></i> Profil
         </a>
 
-        <a href="{{ route('user.profile.history') }}" class="{{ Request::routeIs('user.profile.history') ? 'active' : '' }}">
+        <a href="{{ route('user.orders.index') }}" class="{{ Request::routeIs('user.orders.index') ? 'active' : '' }}">
             <i class="fas fa-history me-2"></i> Riwayat
         </a>
 
@@ -155,6 +165,34 @@
             @csrf
         </form>
     </div>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top shadow-sm" style="z-index: 102;">
+    <div class="container-fluid">
+        <span class="navbar-brand d-none d-md-inline">Halo, {{ auth()->user()->name }}</span>
+
+        <ul class="navbar-nav ms-auto align-items-center">
+            <!-- Notifikasi Dropdown -->
+            <li class="nav-item dropdown me-3">
+                <a class="nav-link dropdown-toggle" href="#" id="notifDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-bell"></i>
+                    @if(isset($notifications) && count($notifications) > 0)
+                        <span class="badge bg-danger">{{ count($notifications) }}</span>
+                    @endif
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notifDropdown">
+                    @if(isset($notifications) && count($notifications) > 0)
+                        @foreach($notifications as $notif)
+                            <li><a class="dropdown-item" href="#">{{ $notif }}</a></li>
+                        @endforeach
+                    @else
+                        <li><span class="dropdown-item text-muted">Tidak ada notifikasi</span></li>
+                    @endif
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
 
     <div class="content">
         @yield('content')

@@ -39,7 +39,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-nowrap">Total Harga</th>
-                                    <td>: Rp{{ number_format($order->total_price) }}</td>
+                                    <td>: Rp{{ number_format($order->total_price * 1000, 0, ',', '.') }}</td>
                                 </tr>
                                 <tr>
                                     <th scope="row" class="text-nowrap">Tanggal Pembelian</th>

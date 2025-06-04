@@ -17,43 +17,60 @@
     @endif
 
     <div class="row mt-4">
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-calendar-alt me-2 text-primary"></i> {{ count($events ?? []) }} Event</h5>
-                    <p class="card-text text-muted">Jumlah total event yang tersedia.</p>
+        {{-- Event --}}
+        <div class="col-sm-6 col-xl-3 mb-4">
+            <div class="card border-0 shadow-sm h-100 hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="mb-2">
+                        <i class="fas fa-calendar-alt fa-2x text-primary transition-scale"></i>
+                    </div>
+                    <h5 class="card-title">{{ count($events ?? []) }} Event</h5>
+                    <p class="text-muted small">Jumlah total event yang tersedia.</p>
                     <a href="{{ route('admin.events.index') }}" class="btn btn-sm btn-outline-primary">Kelola Event</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-shopping-cart me-2 text-success"></i> {{ count($orders ?? []) }} Pesanan</h5>
-                    <p class="card-text text-muted">Total pesanan tiket yang masuk.</p>
+
+        {{-- Orders --}}
+        <div class="col-sm-6 col-xl-3 mb-4">
+            <div class="card border-0 shadow-sm h-100 hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="mb-2">
+                        <i class="fas fa-shopping-cart fa-2x text-success transition-scale"></i>
+                    </div>
+                    <h5 class="card-title">{{ count($orders ?? []) }} Pesanan</h5>
+                    <p class="text-muted small">Total pesanan tiket yang masuk.</p>
                     <a href="{{ route('admin.orders.index') }}" class="btn btn-sm btn-outline-success">Kelola Pesanan</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-users me-2 text-info"></i> {{ count($users ?? []) }} Pengguna</h5>
-                    <p class="card-text text-muted">Pengguna yang terdaftar di platform.</p>
+
+        {{-- Users --}}
+        <div class="col-sm-6 col-xl-3 mb-4">
+            <div class="card border-0 shadow-sm h-100 hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="mb-2">
+                        <i class="fas fa-users fa-2x text-info transition-scale"></i>
+                    </div>
+                    <h5 class="card-title">{{ count($users ?? []) }} Pengguna</h5>
+                    <p class="text-muted small">Pengguna yang terdaftar di platform.</p>
                     <a href="{{ route('admin.users.index') }}" class="btn btn-sm btn-outline-info">Kelola Pengguna</a>
                 </div>
             </div>
         </div>
-        <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow-sm border-0 h-100">
-                <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-ticket-alt me-2 text-warning"></i> {{ count($tickets ?? []) }} Tiket</h5>
-                    <p class="card-text text-muted">Total tiket yang tersedia/terjual.</p>
+
+        {{-- Tickets --}}
+        <div class="col-sm-6 col-xl-3 mb-4">
+            <div class="card border-0 shadow-sm h-100 hover-shadow transition">
+                <div class="card-body text-center">
+                    <div class="mb-2">
+                        <i class="fas fa-ticket-alt fa-2x text-warning transition-scale"></i>
+                    </div>
+                    <h5 class="card-title">{{ count($tickets ?? []) }} Tiket</h5>
+                    <p class="text-muted small">Total tiket yang tersedia/terjual.</p>
                     <a href="{{ route('admin.tickets.index') }}" class="btn btn-sm btn-outline-warning">Kelola Tiket</a>
                 </div>
             </div>
         </div>
     </div>
-
-    
 @endsection

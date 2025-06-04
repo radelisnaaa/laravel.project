@@ -19,12 +19,23 @@ class UserOrderController extends Controller
     }
 
     // Tampilkan detail order user berdasarkan ID
-    public function show($id)
-    {
-        $order = Order::with('ticket.event')->where('user_id', Auth::id())->findOrFail($id);
+   public function show($id)
+{
+    // Ambil order beserta relasinya
+    $order = Order::with('ticket.event')->findOrFail($id);
 
-        return view('user.orders.show', compact('order'));
-    }
+    // Format harga menggunakan helper rupiah()
+    $formatted = [
+        'total_price' => ($order->total_price),
+        'quantity' => $order->quantity,
+        'event_name' => $order->ticket->event->name,
+        'ticket_name' => $order->ticket->name,
+        'status' => ucfirst($order->status),
+    ];
+
+    return view('user.orders.show', compact('order', 'formatted'));
+}
+
 
     // Update status order, misal untuk admin update atau fitur lain (optional)
     public function updateStatus(Request $request, $id)
@@ -37,7 +48,7 @@ class UserOrderController extends Controller
 
         $order->update(['status' => $request->status]);
 
-        return redirect()->route('user.profile.history')->with('success', 'Status order berhasil diperbarui');
+        return redirect()->route('user.orders.index')->with('success', 'Status order berhasil diperbarui');
     }
 
     // Method bayar: update status order jadi paid
@@ -46,12 +57,12 @@ class UserOrderController extends Controller
         $order = Order::where('user_id', Auth::id())->findOrFail($id);
 
         if ($order->status !== 'pending') {
-            return redirect()->route('user.profile.history')->with('error', 'Order sudah dibayar atau dibatalkan.');
+            return redirect()->route('user.orders.index')->with('error', 'Order sudah dibayar atau dibatalkan.');
         }
 
         $order->status = 'paid';
         $order->save();
 
-        return redirect()->route('user.profile.history')->with('success', 'Pembayaran berhasil dilakukan!');
+        return redirect()->route('user.orders.index')->with('success', 'Pembayaran berhasil dilakukan!');
     }
 }

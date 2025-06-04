@@ -1,114 +1,216 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detail Order</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+@extends('layouts.public-app')
+
+@section('title', 'Detail Order Anda - ' . $order->id)
+
+@section('head_extra')
     <style>
-        body {
-            background-color: #e0f7fa; /* Soft light blue background */
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: #444;
-            margin: 0;
-            padding: 30px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
+        /* Mengatur ulang beberapa gaya agar lebih bersih dan modern */
+        .container {
+            max-width: 700px; /* Lebar container lebih fokus */
+            padding-top: 30px;
+            padding-bottom: 30px;
         }
 
-        .container {
-            background-color: #fff; /* White container */
-            border-radius: 15px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            max-width: 600px;
-            width: 100%;
+        .order-card {
+            background-color: #ffffff;
+            border-radius: 1.25rem; /* Sudut lebih melengkung */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Bayangan lebih dalam */
+            padding: 40px; /* Padding internal lebih besar */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
         .page-title {
-            color: #1e88e5; /* Vibrant blue title */
+            color: var(--primary-color);
             text-align: center;
+            margin-bottom: 35px;
+            font-weight: 700;
+            font-size: 2.2em; /* Ukuran judul lebih besar */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .page-title i {
+            margin-right: 15px;
+            font-size: 1.2em;
+            color: var(--primary-color);
+        }
+
+        .order-summary {
+            background-color: #f0f8ff; /* Latar belakang detail order lebih lembut */
+            border-radius: 1rem;
+            padding: 30px;
             margin-bottom: 30px;
-            font-weight: bold;
-            font-size: 2em;
+            border: 1px solid #cfe2ff; /* Border biru muda */
         }
 
-        .order-details {
-            margin-bottom: 20px;
-            padding: 25px;
-            border-radius: 10px;
-            background-color: #f9fbe7; /* Light yellow-green for details */
-            border-left: 5px solid #1e88e5; /* Blue accent border */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-        }
-
-        .order-details p {
-            margin-bottom: 12px;
-            font-size: 1.1em;
-            display: flex; /* Use flexbox for label and value alignment */
+        .order-item {
+            display: flex;
             justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px dashed #e9ecef; /* Garis putus-putus */
+        }
+
+        .order-item:last-child {
+            border-bottom: none;
+        }
+
+        .order-item strong {
+            color: var(--dark-text);
+            font-weight: 600;
+            display: flex;
             align-items: center;
         }
 
-        .order-details strong {
-            color: #333;
-            margin-right: 10px; /* Add some space between label and value */
+        .order-item strong i {
+            margin-right: 10px;
+            color: var(--primary-color);
         }
 
-        .back-button {
-            background-color: #1e88e5; /* Vibrant blue button */
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 15px;
-            text-decoration: none;
-            transition: background-color 0.3s ease, box-shadow 0.3s ease;
-            display: inline-block;
-            margin-top: 20px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        .order-item span {
+            color: #555;
+            font-weight: 500;
         }
 
-        .back-button:hover {
-            background-color: #1565c0; /* Darker blue on hover */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        .total-price-section {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 0.75rem;
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3em;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
+        }
+
+        .total-price-section span:first-child {
+            display: flex;
+            align-items: center;
+        }
+
+        .total-price-section i {
+            margin-right: 10px;
+        }
+
+        .action-buttons {
+            margin-top: 40px;
+            text-align: center;
+        }
+
+        .action-buttons .btn {
+            min-width: 200px;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border-radius: 0.75rem;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-outline-secondary {
+            color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+        .btn-outline-secondary:hover {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #0056b3;
+            transform: translateY(-2px);
+        }
+
+        /* Responsif */
+        @media (max-width: 576px) {
+            .order-card {
+                padding: 20px;
+            }
+            .page-title {
+                font-size: 1.8em;
+                flex-direction: column;
+            }
+            .page-title i {
+                margin-right: 0;
+                margin-bottom: 10px;
+            }
+            .action-buttons .btn {
+                width: 100%;
+                margin-bottom: 15px;
+                margin-left: 0;
+                margin-right: 0;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="page-title"><i class="fas fa-file-invoice-dollar me-2"></i> Detail Order #{{ $order->id }}</h1>
+@endsection
 
-        <div class="order-details">
-            <p>
-                <strong><i class="fas fa-calendar-alt me-1"></i> Event:</strong>
+@section('content')
+<div class="container py-5">
+    <div class="order-card">
+        <h1 class="page-title">
+            <i class="fas fa-receipt"></i> Detail Pesanan #{{ $order->id }}
+        </h1>
+
+        <div class="order-summary">
+            <div class="order-item">
+                <strong><i class="fas fa-calendar-alt"></i> Event:</strong>
                 <span>{{ $order->ticket->event->name }}</span>
-            </p>
-            <p>
-                <strong><i class="fas fa-ticket-alt me-1"></i> Tiket:</strong>
-                <span>{{ $order->ticket->name }} (ID: {{ $order->ticket->id }})</span>
-            </p>
-            <p>
-                <strong><i class="fas fa-shopping-cart me-1"></i> Jumlah:</strong>
+            </div>
+            <div class="order-item">
+                <strong><i class="fas fa-ticket-alt"></i> Tiket:</strong>
+                <span>{{ $order->ticket->name }}</span>
+            </div>
+            <div class="order-item">
+                <strong><i class="fas fa-sort-numeric-up-alt"></i> Jumlah:</strong>
                 <span>{{ $order->quantity }}</span>
-            </p>
-            <p>
-                <strong><i class="fas fa-coins me-1"></i> Total Harga:</strong>
-                <span>Rp{{ number_format($order->total_price) }}</span>
-            </p>
-            <p>
-                <strong><i class="fas fa-calendar-check me-1"></i> Tanggal Pembelian:</strong>
-                <span>{{ $order->created_at->format('d F Y') }}</span>
-            </p>
+            </div>
+            <div class="order-item">
+                <strong><i class="fas fa-info-circle"></i> Status Pesanan:</strong>
+                {{-- Anda bisa menambahkan logika status di sini, contoh: --}}
+                @php
+                    $status = 'Completed'; // Ganti dengan logika status dari model $order Anda
+                    $statusClass = 'text-success'; // Atur warna berdasarkan status
+                    if($status == 'Pending') $statusClass = 'text-warning';
+                    if($status == 'Cancelled') $statusClass = 'text-danger';
+                @endphp
+                <span class="{{ $statusClass }} font-weight-bold">{{ $status }}</span>
+            </div>
+            <div class="order-item">
+                <strong><i class="fas fa-calendar-check"></i> Tanggal Pembelian:</strong>
+                <span>{{ \Carbon\Carbon::parse($order->created_at)->format('d F Y, H:i') }} WIB</span>
+            </div>
         </div>
 
-        <a href="{{ route('orders.index') }}" class="back-button">
-            <i class="fas fa-arrow-left me-1"></i> Kembali ke Daftar Order
-        </a>
-    </div>
+        <div class="total-price-section">
+            <span><i class="fas fa-wallet"></i> Total Pembayaran:</span>
+            <span>Rp{{ number_format($order->total_price, 0, ',', '.') }}</span>
+        </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
+        <div class="action-buttons">
+            <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-list-alt me-2"></i> Lihat Semua Pesanan
+            </a>
+            <a href="{{ route('user.dashboard') }}" class="btn btn-primary">
+                <i class="fas fa-home me-2"></i> Kembali ke Dasbor
+            </a>
+        </div>
+    </div>
+</div>
+@endsection
+
+@section('scripts_extra')
+    @endsection
