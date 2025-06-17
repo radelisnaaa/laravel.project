@@ -10,6 +10,7 @@ use App\Models\Ticket;
 use App\Models\EventUser;
 use Midtrans\Config;
 use Midtrans\Snap;
+use GuzzleHttp\Client;
 
 class UserOrderController extends Controller
 {
@@ -82,42 +83,64 @@ public function payment($id)
     Config::$isProduction = config('midtrans.is_production');
     Config::$isSanitized = true;
     Config::$is3ds = true;
+    // Ambil snap token dari Midtrans Snap API
 
-    try {
-            // Buat Snap Token jika belum ada
-            if (empty($order->snap_token)) {
-                $params = [
-                    'transaction_details' => [
-                        'order_id' => 'ORDER-' . $order->id,
-                        'gross_amount' => (int) $order->total_price,
-                    ],
-                    'customer_details' => [
-                        'first_name' => Auth::user()->name,
-                        'email' => Auth::user()->email,
-                    ],
-                    'item_details' => [
-                        [
-                            'id' => $order->ticket->id,
-                            'price' => (int) $order->ticket->price,
-                            'quantity' => $order->quantity,
-                            'name' => $order->ticket->name . ' - ' . $order->ticket->event->name,
-                        ]
-                    ],
-                ];
-
-                $snapToken = Snap::getSnapToken($params);
-                $order->snap_token = $snapToken;
-                $order->save();
+    // Hanya buat Snap Token jika belum ada
+        if (!$order->snap_token) {
+            $amount = $order->total_price;
+            
+            // Pastikan amount valid dan lebih besar dari 0
+            if ($amount <= 0) {
+            return view('user.orders.payment', [
+                'order' => $order,
+                'error' => 'Harga tidak valid. Silahkan hubungi admin.',
+            ]);
             }
+
+            $transaction = [
+            'transaction_details' => [
+                'order_id' => 'ORDER-' . $order->id . '-' . time(),
+                'gross_amount' => (int)$amount,
+            ],
+            'customer_details' => [
+                'first_name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+            ],
+            'item_details' => [
+                [
+                'id' => $order->ticket->id,
+                'price' => (int)$order->ticket->price,
+                'quantity' => $order->quantity,
+                'name' => $order->ticket->name . ' - ' . $order->ticket->event->name,
+                ]
+            ]
+            ];
+        $client = new Client();
+        $response = $client->post('https://app.sandbox.midtrans.com/snap/v1/transactions', [
+            'headers' => [
+                'Accept' => 'application/json',
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Basic ' . base64_encode(config('midtrans.server_key') . ':'),
+            ],
+            'json' => $transaction,
+            'verify' => false, // jika SSL error di lokal
+        ]);
+
+        $body = json_decode($response->getBody(), true);
+        $snapToken = $body['token'] ?? null;
+
+        // Simpan snap_token ke database jika berhasil
+        if ($snapToken) {
+            $order->snap_token = $snapToken;
+            $order->save();
+        }
+    }
 
             return view('user.orders.payment', [
                 'order' => $order,
                 'snapToken' => $order->snap_token
             ]);
-        } catch (\Exception $e) {
-            return redirect()->route('user.orders.index')
-                ->with('error', 'Terjadi kesalahan saat memproses pembayaran: ' . $e->getMessage());
-        }
+       
     }
 
     public function updateStatus(Request $request, $id)
