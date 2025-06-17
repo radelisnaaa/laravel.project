@@ -23,6 +23,7 @@ class Order extends Model
 
     protected $fillable = [
         'user_id',
+        'snap_token',
         'ticket_id',
         'quantity',
         'total_price',

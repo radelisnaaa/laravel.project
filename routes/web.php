@@ -8,6 +8,8 @@ use App\Http\Controllers\TicketController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\MidtransController;
+
 //admin 
 
 use App\Http\Controllers\Admin\AdminController;
@@ -24,6 +26,7 @@ use App\Http\Controllers\User\UserDashboardController;
 use App\Http\Controllers\User\UserEventManagementController;
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
+use App\Http\Controllers\User\UserTicketController;
 
 
 
@@ -66,6 +69,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/orders', [OrderController::class, 'store'])->name('orders.store');
     Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
     Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
+    
     // Route::get('/orders', [ProfileController::class, 'index'])->name('profile.index');
     
 
@@ -96,33 +100,27 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(function () {
     // Route untuk halaman dashboard user
     Route::get('/dashboard', [UserDashboardController::class, 'index'])->name('dashboard');
-     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+    Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
+    
+    // Route untuk orders dan payment
+    Route::get('/orders', [UserOrderController::class, 'index'])->name('orders.index');
+    Route::post('/orders', [UserOrderController::class, 'store'])->name('orders.store');
+    Route::get('/orders/{id}', [UserOrderController::class, 'show'])->name('orders.show');
+    Route::get('/orders/{id}/pay', [UserOrderController::class, 'payWithMidtrans'])->name('orders.pay');
+    Route::get('/orders/{id}/payment', [UserOrderController::class, 'payment'])->name('orders.payment');
+
+
+    Route::get('/tickets/{id}', [UserTicketController::class, 'show'])->name('tickets.show');
+
 
     // Route untuk event user
-    Route::get('/events', [UserEventManagementController::class, 'index'])->name('events');
-    Route::get('/event/{id}', [UserEventManagementController::class, 'show'])->name('events.detail');
+    Route::get('/events', [UserEventManagementController::class, 'index'])->name('events.index');
     Route::get('/events/{id}', [UserEventManagementController::class, 'show'])->name('events.show');
 
-    // Route untuk manage event (admin atau pengguna yang mengelola event)
-    Route::get('/manage-events', [UserEventManagementController::class, 'index'])->name('manage-events.index');
-    Route::get('/manage-events/{id}', [UserEventManagementController::class, 'show'])->name('manage-events.show');
-
-    
-        Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
-        Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
-        Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
-        Route::resource('orders', UserOrderController::class);
-        //Route::get('/profile/history', [UserProfileController::class, 'history'])->name('profile.history');
-        Route::get('orders/{order}/pay', [UserOrderController::class, 'pay'])->name('orders.pay');  // << ini route untuk bayar
-    });
-    
-
-    //Route::get('/orders', [
-       // OrderController::class, 'index'])->name('orders');
-
-    
-
-
+    // Profile routes
+    Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+});
     // Route untuk notifikasi
     Route::get('/notifications', [UserDashboardController::class, 'notifications'])->name('notifications.index');
 });
@@ -148,6 +146,6 @@ Route::get('/explore-events/{id}', [PublicEventController::class, 'show'])->name
 | Tambahkan route autentikasi jika file auth.php ada
 |--------------------------------------------------------------------------
 */
-if (file_exists(__DIR__.'/auth.php')) {
-    require __DIR__.'/auth.php';
+if (file_exists(__DIR__ . '/auth.php')) {
+    require __DIR__ . '/auth.php';
 }

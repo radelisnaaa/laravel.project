@@ -1,4 +1,4 @@
-@extends('layouts.user-app')
+<!-- @extends('layouts.user-app')
 
 @section('title', 'Detail Order')
 
@@ -31,9 +31,8 @@
                         </li>
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><strong>Total:</strong></span>
-                           <span class="text-success">Rp{{ number_format($order->total_price * 1000, 0, ',', '.') }}</span>
+                            <span class="text-success">Rp{{ number_format($order->total_price * 1000, 0, ',', '.') }}</span>
                         </li>
-
                         <li class="list-group-item d-flex justify-content-between align-items-center">
                             <span><strong>Status:</strong></span>
                             <span class="badge rounded-pill px-3 py-2 bg-{{ 
@@ -45,40 +44,62 @@
                                 {{ ucfirst($order->status) }}
                             </span>
                         </li>
-                    </ul>
+                    </ul> <!-- ✅ PENUTUP UL DITAMBAHKAN DI SINI -->
                 </div>
 
                 <!-- Actions -->
-                <div class="col-md-6 d-flex flex-column justify-content-between">
-                    <div class="d-flex justify-content-end align-items-center gap-2">
-                        <a href="{{ route('user.orders.index') }}" class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Kembali ke daftar order">
+                <div class="col-md-6 d-flex flex-column justify-content-end align-items-end">
+                    <div class="d-flex gap-2 mt-4 mt-md-0">
+                        <a href="{{ route('user.orders.index') }}"
+                           class="btn btn-outline-secondary btn-sm"
+                           data-bs-toggle="tooltip"
+                           data-bs-placement="top"
+                           title="Kembali ke daftar order">
                             <i class="fas fa-arrow-left me-1"></i> Kembali
                         </a>
                         @if ($order->status === 'pending')
-                            <a href="{{ route('user.orders.pay', $order->id) }}" class="btn btn-success btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Bayar tiket sekarang">
+                            <button type="button"
+                                    class="btn btn-success btn-sm"
+                                    id="pay-button"
+                                    data-bs-toggle="tooltip"
+                                    data-bs-placement="top"
+                                    title="Bayar tiket sekarang">
                                 <i class="fas fa-money-bill me-1"></i> Bayar Sekarang
-                            </a>
+                            </button>
                         @endif
                     </div>
-                    <div class="alert alert-warning mt-4 small mb-0" role="alert">
-                        <i class="fas fa-exclamation-triangle me-1 text-warning"></i>
-                        <strong>Catatan:</strong> Harap segera melakukan pembayaran jika status pesanan Anda adalah <em>"Pending"</em>.
-                    </div>
                 </div>
-            </div>
+            </div> <!-- row -->
         </div>
     </div>
 </div>
 
-<!-- Tooltip init -->
+<!-- Tooltip & Snap.js -->
 @push('scripts')
+<!-- Midtrans Snap.js -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ config('midtrans.client_key') }}"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
+    document.querySelectorAll('.pay-button').forEach(function(button) {
+        button.addEventListener('click', function () {
+            var snapToken = this.dataset.snapToken;
+            window.snap.pay(snapToken, {
+                onSuccess: function(result) {
+                    alert("Payment Successful!");
+                    location.reload();
+                },
+                onPending: function(result) {
+                    alert("Waiting for payment...");
+                },
+                onError: function(result) {
+                    alert("Payment failed. Please try again.");
+                },
+                onClose: function() {
+                    alert("Payment popup closed.");
+                }
+            });
+        });
     });
 </script>
 @endpush
-@endsection
+
+@endsection -->
