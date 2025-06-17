@@ -219,7 +219,7 @@
                                                     </p>
                                                 @endif
                                                 <div class="mt-auto pt-3"> {{-- Pushes the button to the bottom, add padding-top --}}
-                                                    <a href="{{ route('events.show', $event->id) }}" class="btn btn-sm btn-outline-primary w-100">Lihat Detail <i class="fas fa-arrow-right ms-1"></i></a>
+                                                    <a href="{{ route('user.events.show', $event->id) }}" class="btn btn-sm btn-outline-primary w-100">Lihat Detail <i class="fas fa-arrow-right ms-1"></i></a>
                                                 </div>
                                             </div>
                                         </div>

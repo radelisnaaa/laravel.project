@@ -1,4 +1,4 @@
-@extends('layouts.admin-app')
+@extends('layouts.user-app')
 
 @section('title', 'Event Saya')
 @section('title-content', 'Event Saya')
@@ -8,7 +8,7 @@
         <h1 class="mb-4"><i class="fas fa-calendar-check me-2"></i> Event Saya</h1>
 
         @if ($myEvents->isEmpty())
-            <div class="alert alert-info">
+            <div class="alert alert-info" role="alert">
                 <i class="fas fa-info-circle me-1"></i> Anda belum mengikuti event apapun.
             </div>
         @else

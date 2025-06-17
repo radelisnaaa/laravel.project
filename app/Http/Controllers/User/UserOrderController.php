@@ -68,22 +68,22 @@ class UserOrderController extends Controller
         return redirect()->route('user.orders.pay.with.midtrans', $order->id);
     }
 
-    public function payment($id)
-    {
-        $order = Order::with('ticket.event')->where('user_id', Auth::id())->findOrFail($id);
+public function payment($id)
+{
+    $order = Order::with('ticket.event')->where('user_id', Auth::id())->findOrFail($id);
 
-        if ($order->status !== 'pending') {
-            return redirect()->route('user.orders.index')
-                ->with('error', 'Order ini sudah tidak dalam status pending.');
-        }
+    if ($order->status !== 'pending') {
+        return redirect()->route('user.orders.index')
+            ->with('error', 'Order ini sudah tidak dalam status pending.');
+    }
 
-        // Set konfigurasi midtrans
-        Config::$serverKey = config('midtrans.server_key');
-        Config::$isProduction = config('midtrans.is_production');
-        Config::$isSanitized = true;
-        Config::$is3ds = true;
+    // Set konfigurasi midtrans
+    Config::$serverKey = config('midtrans.server_key');
+    Config::$isProduction = config('midtrans.is_production');
+    Config::$isSanitized = true;
+    Config::$is3ds = true;
 
-        try {
+    try {
             // Buat Snap Token jika belum ada
             if (empty($order->snap_token)) {
                 $params = [

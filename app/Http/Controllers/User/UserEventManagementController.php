@@ -15,6 +15,12 @@ class UserEventManagementController extends Controller
 
         return view('user.events.index', compact('myEvents'));
     }
+    public function join($id)
+    {
+        // logika untuk join event (bisa disesuaikan nanti)
+        return back()->with('success', 'Berhasil join event.');
+    }
+
 
     public function show($id)
 {

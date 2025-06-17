@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\AdminProfileController as AdminProfileController;
 //user
 
 use App\Http\Controllers\User\UserDashboardController;
-//use App\Http\Controllers\User\UserEventController;
+
 use App\Http\Controllers\User\UserEventManagementController;
 use App\Http\Controllers\User\UserProfileController;
 use App\Http\Controllers\User\UserOrderController;
@@ -116,6 +116,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(fu
     // Route untuk event user
     Route::get('/events', [UserEventManagementController::class, 'index'])->name('events.index');
     Route::get('/events/{id}', [UserEventManagementController::class, 'show'])->name('events.show');
+    Route::post('/events/{id}/join', [UserEventManagementController::class, 'join'])->name('events.join');
+
 
     // Profile routes
     Route::get('/profile/edit', [UserProfileController::class, 'edit'])->name('profile.edit');
