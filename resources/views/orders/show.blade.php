@@ -201,7 +201,7 @@
         </div>
 
         <div class="action-buttons">
-            <a href="{{ route('orders.index') }}" class="btn btn-outline-secondary">
+            <a href="{{ route('user.orders.index') }}" class="btn btn-outline-secondary">
                 <i class="fas fa-list-alt me-2"></i> Lihat Semua Pesanan
             </a>
             <a href="{{ route('user.dashboard') }}" class="btn btn-primary">

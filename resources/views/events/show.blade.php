@@ -154,9 +154,9 @@
 
                             @if($userOrder)
                                 <p class="text-success"><i class="fas fa-check-circle me-2"></i> Anda sudah membeli tiket ini (Order ID: {{ $userOrder->id }})</p>
-                                <a href="{{ route('orders.show', $userOrder->id) }}" class="btn btn-info btn-sm">Lihat Order</a>
+                                <a href="{{ route('orders.user.show', $userOrder->id) }}" class="btn btn-info btn-sm">Lihat Order</a>
                             @else
-                                <form action="{{ route('orders.store') }}" method="POST" class="mt-3">
+                                <form action="{{ route('orders.user.store') }}" method="POST" class="mt-3">
                                     @csrf
                                     <input type="hidden" name="ticket_id" value="{{ $ticket->id }}">
                                     <input type="hidden" name="event_id" value="{{ $event->id }}">

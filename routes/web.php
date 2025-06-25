@@ -108,6 +108,8 @@ Route::middleware(['auth', 'verified'])->prefix('user')->name('user.')->group(fu
     Route::get('/orders/{id}', [UserOrderController::class, 'show'])->name('orders.show');
     Route::get('/orders/{id}/pay', [UserOrderController::class, 'payWithMidtrans'])->name('orders.pay');
     Route::get('/orders/{id}/payment', [UserOrderController::class, 'payment'])->name('orders.payment');
+    Route::post('/orders/{id}/update-status', [UserOrderController::class, 'updateStatus'])->name('orders.update-status');
+
 
 
     Route::get('/tickets/{id}', [UserTicketController::class, 'show'])->name('tickets.show');

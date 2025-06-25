@@ -1,37 +1,50 @@
 <?php
 
-namespace App\Http\Controllers\API;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
-use Illuminate\Support\Facades\Log;
+use Midtrans\Notification;
 
 class MidtransCallbackController extends Controller
 {
-    public function callback(Request $request)
+    public function handle(Request $request)
     {
-        $serverKey = config('midtrans.server_key');
-        $hashed = hash("sha512", $request->order_id . $request->status_code . $request->gross_amount . $serverKey);
+        // Inisialisasi Midtrans notification
+        $notif = new Notification();
 
-        if ($hashed == $request->signature_key) {
-            $order = Order::where('id', $request->order_id)->first();
-            
-            if ($order) {
-                if ($request->transaction_status == 'capture' || $request->transaction_status == 'settlement') {
-                    $order->status = 'paid';
-                } elseif ($request->transaction_status == 'deny' || $request->transaction_status == 'expire' || $request->transaction_status == 'cancel') {
-                    $order->status = 'cancelled';
-                } elseif ($request->transaction_status == 'pending') {
-                    $order->status = 'pending';
-                }
+        $transactionStatus = $notif->transaction_status;
+        $paymentType = $notif->payment_type;
+        $orderId = $notif->order_id; // contoh: "ORDER-123"
+        $fraudStatus = $notif->fraud_status;
 
-                $order->save();
-                
-                return response()->json(['status' => 'success']);
-            }
+        // Ambil ID asli jika kamu pakai format custom, misal "ORDER-{id}"
+        $order_id = str_replace('ORDER-', '', $orderId);
+        $order = Order::find($order_id);
+
+        if (!$order) {
+            return response()->json(['message' => 'Order not found'], 404);
         }
 
-        return response()->json(['status' => 'error'], 404);
+        // Update status berdasarkan Midtrans
+        if ($transactionStatus === 'capture') {
+            if ($paymentType === 'credit_card') {
+                if ($fraudStatus === 'challenge') {
+                    $order->status = 'pending';
+                } else {
+                    $order->status = 'paid';
+                }
+            }
+        } elseif ($transactionStatus === 'settlement') {
+            $order->status = 'paid';
+        } elseif ($transactionStatus === 'pending') {
+            $order->status = 'pending';
+        } elseif ($transactionStatus === 'deny' || $transactionStatus === 'expire' || $transactionStatus === 'cancel') {
+            $order->status = 'cancelled';
+        }
+
+        $order->save();
+
+        return response()->json(['message' => 'Callback processed successfully']);
     }
 }

@@ -14,6 +14,7 @@ use GuzzleHttp\Client;
 
 class UserOrderController extends Controller
 {
+
     public function index()
     {
         $orders = Auth::user()->orders()->with('ticket.event')->latest()->paginate(10);
@@ -143,19 +144,7 @@ public function payment($id)
        
     }
 
-    public function updateStatus(Request $request, $id)
-    {
-        $order = Order::where('user_id', Auth::id())->findOrFail($id);
-
-        $request->validate([
-            'status' => 'required|in:pending,paid,cancelled',
-        ]);
-
-        $order->update(['status' => $request->status]);
-
-        return redirect()->route('user.orders.index')->with('success', 'Status order berhasil diperbarui');
-    }
-
+    
     // Jika kamu mau buat simulasi pembayaran manual (untuk testing)
     public function pay($id)
     {
@@ -169,5 +158,19 @@ public function payment($id)
         $order->save();
 
         return redirect()->route('user.orders.index')->with('success', 'Pembayaran berhasil dilakukan!');
+    }
+
+
+public function updateStatus(Request $request, $id)
+    {
+        $order = Order::where('user_id', Auth::id())->findOrFail($id);
+
+        $request->validate([
+            'status' => 'required|in:pending,paid,cancelled',
+        ]);
+
+        $order->update(['status' => $request->status]);
+
+        return redirect()->route('user.orders.index')->with('success', 'Status order berhasil diperbarui');
     }
 }
