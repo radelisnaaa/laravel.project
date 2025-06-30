@@ -1,57 +1,51 @@
 {
-    "version": 2,
-    "functions": {
-        "api/index.php": {
-            "runtime": "vercel-php@0.7.3"
-        }
-    },
-    "routes": [
-        {
-            "src": "/build/(.*)",
-            "dest": "/build/$1",
-            "headers": {
-                "cache-control": "public, max-age=31536000, immutable"
-            }
-        },
-        {
-            "src": "/storage/(.*)",
-            "dest": "/storage/app/public/$1"
-        },
-        {
-            "src": "/(css|js|images|fonts)/(.*)",
-            "dest": "/$1/$2",
-            "headers": {
-                "cache-control": "public, max-age=31536000"
-            }
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/api/index.php"
-        }
-    ],
-    "env": {
-        "PHP_INI_SCAN_DIR": "api",
-        "APP_ENV": "production",
-        "APP_DEBUG": "true",
-        "APP_URL": "https://virtualevent.my.id",
-        "ASSET_URL": "https://virtualevent.my.id/",
-        "APP_CONFIG_CACHE": "/tmp/config.php",
-        "APP_EVENTS_CACHE": "/tmp/events.php",
-        "APP_PACKAGES_CACHE": "/tmp/packages.php",
-        "APP_ROUTES_CACHE": "/tmp/routes.php",
-        "APP_SERVICES_CACHE": "/tmp/services.php",
-        "VIEW_COMPILED_PATH": "/tmp",
-        "CACHE_DRIVER": "array",
-        "LOG_CHANNEL": "stderr",
-        "SESSION_DRIVER": "cookie",
-        "SESSION_LIFETIME": "120",
-        "SESSION_SECURE_COOKIE": "true",
-        "DB_CONNECTION": "mysql",
-        "DB_HOST": "x75r6.h.filess.io",
-        "DB_PORT": "61002",
-        "DB_DATABASE": "virtualevent_determine",
-        "DB_USERNAME": "virtualevent_determine",
-        "DB_PASSWORD": "bccdcac1fcf002280cd20998f461824151404d6b"
-    },
-    "outputDirectory": "public"
+  "version": 2,
+  "builds": [
+    {
+      "src": "public/index.php",
+      "use": "@vercel/php",
+      "config": {
+        "includeFiles": [
+          "app/**",
+          "bootstrap/**",
+          "config/**",
+          "database/**",
+          "public/**",
+          "resources/**",
+          "routes/**",
+          "storage/**",
+          "vendor/**"
+        ]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/public/index.php"
+    }
+  ],
+  "env": {
+    "APP_ENV": "production",
+    "APP_DEBUG": "true",
+    "APP_URL": "https://virtualevent.my.id",
+    "ASSET_URL": "https://virtualevent.my.id",
+    "APP_CONFIG_CACHE": "/tmp/config.php",
+    "APP_EVENTS_CACHE": "/tmp/events.php",
+    "APP_PACKAGES_CACHE": "/tmp/packages.php",
+    "APP_ROUTES_CACHE": "/tmp/routes.php",
+    "APP_SERVICES_CACHE": "/tmp/services.php",
+    "VIEW_COMPILED_PATH": "/tmp",
+    "CACHE_DRIVER": "array",
+    "LOG_CHANNEL": "stderr",
+    "SESSION_DRIVER": "cookie",
+    "SESSION_LIFETIME": "120",
+    "SESSION_SECURE_COOKIE": "true",
+    "DB_CONNECTION": "mysql",
+    "DB_HOST": "x75r6.h.filess.io",
+    "DB_PORT": "61002",
+    "DB_DATABASE": "virtualevent_determine",
+    "DB_USERNAME": "virtualevent_determine",
+    "DB_PASSWORD": "bccdcac1fcf002280cd20998f461824151404d6b"
+  }
 }
