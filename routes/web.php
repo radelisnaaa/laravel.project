@@ -9,6 +9,10 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MidtransController;
+use App\Http\Controllers\SupportController;
+
+Route::get('/support', [SupportController::class, 'index'])->name('support.index');
+Route::post('/support', [SupportController::class, 'store'])->name('support.store');
 
 //admin 
 
