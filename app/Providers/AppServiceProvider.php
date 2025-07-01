@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -9,6 +10,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         if (app()->environment('production')) {
+            // Override storage paths
             Config::set('cache.default', 'file');
             Config::set('cache.stores.file.path', '/tmp/cache');
             Config::set('session.driver', 'file');
