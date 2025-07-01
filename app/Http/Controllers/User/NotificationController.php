@@ -9,11 +9,12 @@ use Illuminate\Http\Request;
 class NotificationController extends Controller
 {
     // Tampilkan semua notifikasi milik user login
-    public function index()
-    {
-        $notifications = Auth::user()->notifications()->latest()->get();
-        return view('user.notifications.index', compact('notifications'));
-    }
+   public function index()
+{
+    $notifications = Auth::user()->notifications()->latest()->get();
+    return view('user.notifications.index', compact('notifications'));
+}
+
 
     // Tandai notifikasi sebagai dibaca
     public function markAsRead($id)
