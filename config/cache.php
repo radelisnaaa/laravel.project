@@ -33,29 +33,30 @@ return [
 
     'stores' => [
 
-        'array' => [
-            'driver' => 'array',
-            'serialize' => false,
-        ],
+    'array' => [
+        'driver' => 'array',
+        'serialize' => false,
+    ],
 
-        'database' => [
-            'driver' => 'database',
-            'table' => env('DB_CACHE_TABLE', 'cache'),
-            'connection' => env('DB_CACHE_CONNECTION', null),
-            'lock_connection' => env('DB_CACHE_LOCK_CONNECTION', null),
-        ],
+    'database' => [
+        'driver' => 'database',
+        'table' => env('DB_CACHE_TABLE', 'cache'),
+        'connection' => env('DB_CACHE_CONNECTION', null),
+        'lock_connection' => env('DB_CACHE_LOCK_CONNECTION', null),
+    ],
 
-        'file' => [
-            'driver' => 'file',
-            'path' => storage_path('framework/cache/data'),
-            'lock_path' => storage_path('framework/cache/data'),
-        ],
+    'file' => [
+        'driver' => 'file',
+        // UBAH DUA BARIS INI:
+        'path' => '/tmp/storage/framework/cache/data', // Ubah ini
+        'lock_path' => '/tmp/storage/framework/cache/data', // Dan ubah ini juga
+],
 
-        'memcached' => [
-            'driver' => 'memcached',
-            'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
-            'sasl' => [
-                env('MEMCACHED_USERNAME'),
+    'memcached' => [
+        'driver' => 'memcached',
+        'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
+        'sasl' => [
+            env('MEMCACHED_USERNAME'),
                 env('MEMCACHED_PASSWORD'),
             ],
             'options' => [
