@@ -249,11 +249,26 @@
                         </div>
                     @endif
 
-                    @if(isset($notifications) && count($notifications) > 0)
-                        <div class="alert alert-info-custom alert-dismissible fade show mb-4" role="alert">
-                            <i class="fas fa-bell me-2"></i>
-                            <div>Anda memiliki <strong>{{ count($notifications) }}</strong> notifikasi baru. <a href="#" class="text-primary fw-bold ms-1">Lihat semua</a></div>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    @if(isset($notifications) && $notifications->count() > 0)
+                        <div class="mt-4">
+                            <h5 class="text-primary mb-3">
+                                <i class="fas fa-bell me-2"></i> Notifikasi Terbaru
+                            </h5>
+                            <ul class="list-group">
+                                @foreach($notifications as $notification)
+                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">
+                                                {{ $notification->data['title'] ?? 'Notifikasi' }}
+                                            </div>
+                                            {{ $notification->data['message'] ?? 'Pesan notifikasi tidak tersedia.' }}
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">
+                                            {{ $notification->created_at->diffForHumans() }}
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </div>
                     @endif
 
