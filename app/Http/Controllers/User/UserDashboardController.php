@@ -15,19 +15,16 @@ class UserDashboardController extends Controller
         $user = Auth::user();
         $eventCount = Event::count();
         $orderCount = Order::where('user_id', $user->id)->count();
-
         $historyCount = History::where('user_id', $user->id)->count();
-        $notifications = auth()->user()->notifications()->latest()->take(5)->get();
+        $notifications = $user->notifications()->latest()->take(5)->get();
         $recommendedEvents = Event::latest()->take(5)->get();
-        
 
-   return view('user.dashboard', [
-    'notifications' => $notifications,
-    'eventCount' => $eventCount,
-    'orderCount' => $orderCount,
-    'historyCount' => $historyCount,
-    'recommendedEvents' => $recommendedEvents,
-]);
-    
-}
+        return view('user.dashboard', [
+            'notifications' => $notifications,
+            'eventCount' => $eventCount,
+            'orderCount' => $orderCount,
+            'historyCount' => $historyCount,
+            'recommendedEvents' => $recommendedEvents,
+        ]);
+    }
 }

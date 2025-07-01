@@ -421,11 +421,11 @@
                 <a href="{{ route('user.dashboard') }}" class="btn btn-outline-light ms-md-3 animate__animated animate__zoomIn animate__delay-0-6s">
                     <i class="fas fa-user-circle me-2"></i> Dasbor Saya
                 </a>
-                <form action="{{ route('logout') }}" method="POST" class="d-inline ms-md-3 mt-3 mt-md-0">
-                    @csrf
-                    <button type="submit" class="btn btn-danger-custom animate__animated animate__zoomIn animate__delay-0-9s">
-                        <i class="fas fa-sign-out-alt me-2"></i> Logout
-                    </button>
+                <form action="{{ route('logout', [], true) }}" method="POST" class="d-inline ms-md-3 mt-3 mt-md-0">
+            @csrf
+                <button type="submit" class="btn btn-danger-custom animate__animated animate__zoomIn animate__delay-0-9s">
+                    <i class="fas fa-sign-out-alt me-2"></i> Logout
+                </button>
                 </form>
             @else
                 {{-- Tampilan untuk pengguna yang belum login --}}
